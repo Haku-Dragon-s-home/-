@@ -60,7 +60,6 @@ select * from 表名 where 列名='行名'													查询指定表指定行�
 				return
 			}
 
-			env.f.write('fetch:<info>\n	- api: "https://' + env.data.domain + '/admin.api"\n	- key: "' + cmd[1] + '"</info>')
 			fetch('https://' + env.data.domain + '/admin.api', {
 				method: "POST",
 				headers: {
@@ -88,7 +87,6 @@ select * from 表名 where 列名='行名'													查询指定表指定行�
 		}
 
 		if (cmd.length == 3 && env.data.key) {
-			env.f.write('fetch:<info>\n	- api: "https://' + env.data.domain + '/admin.api"\n	- original_key: "' + cmd[1] + '"\n	- new_key: "' + cmd[2] + '"</info>')
 			if (cmd[1] == env.data.key) {
 				fetch('https://' + env.data.domain + '/admin.api', {
 					method: "POST",
@@ -117,27 +115,32 @@ select * from 表名 where 列名='行名'													查询指定表指定行�
 		}
 	}
 
-	if (['update', 'select', 'create', 'drop', 'alter', 'insert', 'delete'].includes(cmd[0])) {
-		env.f.write('fetch:<info>\n	- api: "https://' + env.data.domain + '/admin.api</info>')
-		fetch('https://' + env.data.domain + '/admin.api', {
-			method: "POST",
-			headers: {
-				"Token": 2,
-			},
-			body: JSON.stringify({
-				"sql": str,
+	if (env.data.key) {
+		if (['update', 'select', 'create', 'drop', 'alter', 'insert', 'delete'].includes(cmd[0])) {
+			fetch('https://' + env.data.domain + '/admin.api', {
+				method: "POST",
+				headers: {
+					"Token": 2,
+				},
+				body: JSON.stringify({
+					"key": env.data.key,
+					"sql": str,
+				})
 			})
-		})
-		.then(response => {
-			if (response.ok) {
-				return response.json()
-			}
-		})
-		.then(json => {
-			env.f.write(`<span><cmd onclick="this.parentNode.querySelector('info').removeAttribute('style'); this.remove()" >[show the raw data]</cmd><info style="display: none;" >` + json + `</info></span>`)
-			return
-		})
-		.catch(err => {env.f.write(('<err>' + err + '</err>').toLowerCase())})
+			.then(response => {
+				if (response.ok) {
+					return response.json()
+				}
+			})
+			.then(json => {
+				env.f.write(`<span><cmd onclick="this.parentNode.querySelector('info').removeAttribute('style'); this.remove()" >[show the raw data]</cmd><info style="display: none;" >` + json.stringify() + `</info></span>`)
+				return
+			})
+			.catch(err => {env.f.write(('<err>' + err + '</err>').toLowerCase())})
+		}
+
+
+
 	}
 
 }

@@ -33,7 +33,7 @@
 		var key = await context.env.MetaDB.prepare('SELECT * from root where data="adminKey"').first()
 		var key = key.content
 		if (body.key == key) {
-			r = await context.env.MetaDB.prepare(sql).all()
+			r = await context.env.MetaDB.prepare(body.sql).all()
 			r.msg = null
 		}
 	}
