@@ -71,14 +71,34 @@ login "旧密码" "新密码"			修改密码`)
 				} else {
 					env.f.write('<err>login failed: </err>your key is incorrect, please try again')
 				}
+				return
 			})
 			.catch(err => {env.f.write(('<err>' + err + '</err>').toLowerCase())})
 		}
 
-		if (cmd.length == 3) {
-			alert('修改')
+		if (cmd.length == 3 && env.data.key) {
+			fetch('https://' + env.data.domain + '/remark.api', {
+				method: "POST",
+				headers: {
+					"Token": 1,
+				},
+				body: JSON.stringify({
+					"old": cmd[1],
+					"new": cmd[2],
+				})
+			})
+			.then(response => {
+				if (response.ok) {
+					return response.json()
+				}
+			})
+			.then(json => {
+				env.f.write('key changed: "' + cmd[1] + '" => "' + cmd[2] + '"')
+				env.data.key = cmd[2]
+				return
+			})
+			.catch(err => {env.f.write(('<err>' + err + '</err>').toLowerCase())})
 		}
-		return
 	}
 
 
