@@ -34,7 +34,7 @@ env.f.analysis = function(str) {
 	env.f.write('<cmd>' + str + '</cmd>')
 
 	if (cmd[0] == 'help') {
-		env.f.write(`---------------------- [ 帮助 ] ----------------------
+		env.f.write(`---------------------- [ <warn>帮助</warn> ] ----------------------
 help							查看帮助信息
 cls							清除控制台
 
@@ -44,7 +44,8 @@ login out						退出登录
 
 select name from sqlite_schema where type='table' and name != '_cf_KV' ORDER BY name		查询所有表名
 select * from 表名																	查询指定表的全部数据
-select * from 表名 where 列名='行名'													查询指定表指定行的数据`)
+select * from 表名 where 列名='行名'													查询指定表指定行的数据
+`)
 		return
 	}
 	if (cmd[0] == 'cls') {
@@ -55,7 +56,7 @@ select * from 表名 where 列名='行名'													查询指定表指定行�
 	if (cmd[0] == 'login') {
 		if (cmd.length == 2) {
 			if (cmd[1] == 'out') {	
-				env.f.write('<err>the sys has logged out</err>')
+				env.f.write('<warn>[INFO]</warn> the sys has logged out')
 				env.data.key = null
 				return
 			}
@@ -133,7 +134,8 @@ select * from 表名 where 列名='行名'													查询指定表指定行�
 				}
 			})
 			.then(json => {
-				env.f.write(`<span><cmd onclick="this.parentNode.querySelector('info').removeAttribute('style'); this.remove()" >[show the raw data]</cmd><info style="display: none;" >` + json.stringify() + `</info></span>`)
+				env.f.table(json.results)
+				env.f.write(`<span><span onclick="this.parentNode.querySelector('info').removeAttribute('style'); this.remove()" >[show the raw data]</cmd><info style="display: none;" >` + JSON.stringify(json) + `</span></span>`)
 				return
 			})
 			.catch(err => {env.f.write(('<err>' + err + '</err>').toLowerCase())})
@@ -145,7 +147,6 @@ select * from 表名 where 列名='行名'													查询指定表指定行�
 
 }
 
-
 env.f.write = function(str) {
 	// 显示结果
 	var span = document.createElement('span')
@@ -154,6 +155,28 @@ env.f.write = function(str) {
 	env.e.output.appendChild(span)
 	window.scrollTo(0, document.documentElement.scrollHeight)
 }
+
+env.f.table = function(array) {
+	// 打印表格
+	var h = array.length
+	var k = Object.keys(array[0])
+	var head = ''
+	var body = ''
+
+	for (var i = 0; i < k.length; i++) {
+		var head = head + '<th>' + k[i] + '</th>'
+	}
+	for (var x = 0; x < h; x++) {
+		var tmp = ''
+		for (var y = 0; y < k.length; y++) {
+			var tmp = tmp + '<th>' + array[x][k[y]] + '</th>'
+		}
+		var body = body + '<tr>' + tmp + '</tr>'
+	}
+
+	env.f.write('<table border="1"><thead><tr>' + head + '</tr></thead><tbody>' + body + '</tbody></table>')
+}
+
 
 
 
@@ -171,10 +194,5 @@ env.e.output.innerHTML = ''
 env.f.write(new Date())
 env.f.write('init env<br />')
 env.f.write('<info>login to use the sys functions<info>')
-
-
-
-
-
 
 
