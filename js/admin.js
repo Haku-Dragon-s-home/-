@@ -165,7 +165,6 @@ env.e.input.addEventListener('keypress', function (e) {
 
 
 env.e.output.innerHTML = ''
-env.e.output.setAttribute('style', 'min-height: ' + (window.innerHeight - 40) + 'px')
 env.f.write(new Date())
 env.f.write('init env<br />')
 env.f.write('<info>login to use the sys functions<info>')
