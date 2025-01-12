@@ -99,8 +99,6 @@ a {
 
 
 textarea {
-	position: fixed;
-	bottom: 0;
 	border: none;
 	width: 100%;
 	height: 20px;
@@ -117,7 +115,6 @@ textarea {
 
 .console {
 	width: 100%;
-	max-height: calc(100% - 40px);
 	color: rgba(var(--t-t1), 1);
 	white-space: pre-wrap;
 }
