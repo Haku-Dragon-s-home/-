@@ -153,8 +153,6 @@ thead tr th {
 table {
 	border-collapse: collapse;
 	border: 1px rgba(var(--t-t1), 0.1) solid;
-	border-radius: 5px;
-	overflow: hidden;
 	text-align: left;
 }
 
@@ -163,17 +161,11 @@ td,
 th {
 	vertical-align: top;
 	padding: 5px 10px;
-	color: rgba(var(--t-t1), 0.6);
+	color: rgba(var(--t-t1), 0.4);
 }
 
 
-tr:nth-child(even) {
-
-	background-color: rgba(var(--t-t1), 0.2);
-}
-
-
-tr:nth-child(odd) {
+tr {
 
 	background-color: rgba(var(--t-t1), 0.1);
 }

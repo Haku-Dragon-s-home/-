@@ -37,15 +37,16 @@ env.f.analysis = function(str) {
 		env.f.write(`---------------------- [ <warn>帮助</warn> ] ----------------------
 help							查看帮助信息
 cls							清除控制台
-
 login "密码"					登录
 login "旧密码" "新密码"			修改密码
 login out						退出登录
-
+pool add "昵称" "内容" "权限" "id"														添加留言 (权限 = 0 / 1, id 默认填 "")
+pool delete "id"																	删除留言
+pool read "page"																	读取指定页的留言
 select name from sqlite_schema where type='table' and name != '_cf_KV' ORDER BY name		查询所有表名
 select * from 表名																	查询指定表的全部数据
-select * from 表名 where 列名='行名'													查询指定表指定行的数据
-`)
+select * from 表名 where 列名='数据'													查询指定表指定行的数据
+update root set 列名='新数据' where 列名='数据'											修改指定位置的数据`)
 		return
 	}
 	if (cmd[0] == 'cls') {
@@ -134,8 +135,7 @@ select * from 表名 where 列名='行名'													查询指定表指定行�
 				}
 			})
 			.then(json => {
-				env.f.table(json.results)
-				env.f.write(`<span><span onclick="this.parentNode.querySelector('info').removeAttribute('style'); this.remove()" >[show the raw data]</cmd><info style="display: none;" >` + JSON.stringify(json) + `</span></span>`)
+				env.f.table(json)
 				return
 			})
 			.catch(err => {env.f.write(('<err>' + err + '</err>').toLowerCase())})
@@ -143,8 +143,50 @@ select * from 表名 where 列名='行名'													查询指定表指定行�
 
 
 
-	}
+		if (cmd[0] == 'pool') {
+			if (cmd.length == 6 && cmd[1] == 'add') {
+				var id = cmd[5]
+				if (cmd[5] == "") {
+					var now = new Date()
+					var options = {timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }
+					var formatter = new Intl.DateTimeFormat('en-US', options)
+					var parts = formatter.formatToParts(now).reduce((acc, part) => ({ ...acc, [part.type]: part.value }), {})
+					var id = `${parts.year}-${parts.month}-${parts.day} ${parts.hour}:${parts.minute}:${parts.second}`
+				}
 
+				var sql = "INSERT INTO comment (id, deletable, name, content) VALUES ('" + id + "', '" + cmd[4] + "', '" + cmd[2] + "', '" + cmd[3] + "'); UPDATE root set content=content+1 where data='comment'"
+			}
+
+			if (cmd.length == 3 && cmd[1] == 'delete') {
+				var sql = "DELETE FROM comment WHERE id = '" + cmd[2] + "'; UPDATE root set content=content-1 where data='comment'"
+			}
+
+			if (cmd.length == 3 && cmd[1] == 'read') {
+				var sql = "SELECT * FROM comment ORDER BY id DESC LIMIT " + cmd[2] + ", 5"
+			}
+
+			fetch('https://' + env.data.domain + '/admin.api', {
+				method: "POST",
+				headers: {
+					"Token": 2,
+				},
+				body: JSON.stringify({
+					"key": env.data.key,
+					"sql": sql,
+				})
+			})
+			.then(response => {
+				if (response.ok) {
+					return response.json()
+				}
+			})
+			.then(json => {
+				env.f.write('<su>[SUCCEED] </su>no error')
+				return
+			})
+			.catch(err => {env.f.write(('<err>' + err + '</err>').toLowerCase())})
+		}
+	}
 }
 
 env.f.write = function(str) {
@@ -156,10 +198,13 @@ env.f.write = function(str) {
 	window.scrollTo(0, document.documentElement.scrollHeight)
 }
 
-env.f.table = function(array) {
+env.f.table = function(d) {
 	// 打印表格
-	var h = array.length
-	var k = Object.keys(array[0])
+	if (!d.results) {return}
+	if (!d.results.length) {return}
+	var a = d.results
+	var h = a.length
+	var k = Object.keys(a[0])
 	var head = ''
 	var body = ''
 
@@ -169,12 +214,12 @@ env.f.table = function(array) {
 	for (var x = 0; x < h; x++) {
 		var tmp = ''
 		for (var y = 0; y < k.length; y++) {
-			var tmp = tmp + '<th>' + array[x][k[y]] + '</th>'
+			var tmp = tmp + '<th>' + a[x][k[y]] + '</th>'
 		}
 		var body = body + '<tr>' + tmp + '</tr>'
 	}
 
-	env.f.write('<table border="1"><thead><tr>' + head + '</tr></thead><tbody>' + body + '</tbody></table>')
+	env.f.write(`<table border="1"><thead><tr>` + head + `</tr></thead><tbody>` + body + `</tbody></table><span><span onclick="this.parentNode.querySelector('info').removeAttribute('style'); this.remove()" >[show the raw data]</span><info style="display: none;" >` + JSON.stringify(d) + `</span></span>`)
 }
 
 
