@@ -12,11 +12,15 @@
 		r.success = true
 		r.msg = null
 
-		if (body.key == key) {
-			r.results.push({"login": 1})
-		} else {
-			r.results.push({"login": 0})
-		}
+		var r = {success: false, meta: key, results: body.key, msg: "Invalid Input"}
+		return Response.json(r)
+
+
+//		if (body.key == key) {
+//			r.results.push({"login": 1})
+//		} else {
+//			r.results.push({"login": 0})
+//		}
 	}
 
 	// 修改密码

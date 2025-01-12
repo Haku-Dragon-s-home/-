@@ -84,27 +84,31 @@ login out						退出登录`)
 
 		if (cmd.length == 3 && env.data.key) {
 			env.f.write('fetch:<info>\n	- api: "https://' + env.data.domain + '/admin.api"\n	- original_key: ' + cmd[1] + '\n	- new_key: ' + cmd[2] + '</info>')
-			fetch('https://' + env.data.domain + '/admin.api', {
-				method: "POST",
-				headers: {
-					"Token": 1,
-				},
-				body: JSON.stringify({
-					"old": cmd[1],
-					"new": cmd[2],
+			if (cmd[1] == env.data.key) {
+				fetch('https://' + env.data.domain + '/admin.api', {
+					method: "POST",
+					headers: {
+						"Token": 1,
+					},
+					body: JSON.stringify({
+						"old": cmd[1],
+						"new": cmd[2],
+					})
 				})
-			})
-			.then(response => {
-				if (response.ok) {
-					return response.json()
-				}
-			})
-			.then(json => {
-				env.f.write('key changed: "' + cmd[1] + '" => "' + cmd[2] + '"')
-				env.data.key = cmd[2]
-				return
-			})
-			.catch(err => {env.f.write(('<err>' + err + '</err>').toLowerCase())})
+				.then(response => {
+					if (response.ok) {
+						return response.json()
+					}
+				})
+				.then(json => {
+					env.f.write('key changed: "' + cmd[1] + '" => "' + cmd[2] + '"')
+					env.data.key = cmd[2]
+					return
+				})
+				.catch(err => {env.f.write(('<err>' + err + '</err>').toLowerCase())})
+			} else {
+				env.f.write('<err>[failed] </err>your original key is incorrect, please try again')
+			}
 		}
 	}
 
