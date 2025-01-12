@@ -38,7 +38,8 @@ env.f.analysis = function(str) {
 help							查看帮助信息
 cls							清除控制台
 login "密码"					登录
-login "旧密码" "新密码"			修改密码`)
+login "旧密码" "新密码"			修改密码
+login out						退出登录`)
 		return
 	}
 	if (cmd[0] == 'cls') {
@@ -48,9 +49,14 @@ login "旧密码" "新密码"			修改密码`)
 
 	if (cmd[0] == 'login') {
 		if (cmd.length == 2) {
-			env.f.write('querying the database:<info>\n	- api: "https://' + env.data.domain + '/remark.api"\n	- key: ' + cmd[1] + '</info>')
+			if (cmd[1] == 'out') {	
+				env.f.write('<err>the sys has logged out</err>')
+				env.data.key = null
+				return
+			}
 
-			fetch('https://' + env.data.domain + '/remark.api', {
+			env.f.write('fetch:<info>\n	- api: "https://' + env.data.domain + '/admin.api"\n	- key: ' + cmd[1] + '</info>')
+			fetch('https://' + env.data.domain + '/admin.api', {
 				method: "POST",
 				headers: {
 					"Token": 0,
@@ -66,10 +72,10 @@ login "旧密码" "新密码"			修改密码`)
 			})
 			.then(json => {
 				if (json.results[0].login) {
-					env.f.write('<su>login succeeded: </su>your key is correct, you have successfully logged in now')
+					env.f.write('<su>[succeeded] </su>your key is correct, you have successfully logged in now')
 					env.data.key = cmd[1]
 				} else {
-					env.f.write('<err>login failed: </err>your key is incorrect, please try again')
+					env.f.write('<err>[failed] </err>your key is incorrect, please try again')
 				}
 				return
 			})
@@ -77,7 +83,8 @@ login "旧密码" "新密码"			修改密码`)
 		}
 
 		if (cmd.length == 3 && env.data.key) {
-			fetch('https://' + env.data.domain + '/remark.api', {
+			env.f.write('fetch:<info>\n	- api: "https://' + env.data.domain + '/admin.api"\n	- original_key: ' + cmd[1] + '\n	- new_key: ' + cmd[2] + '</info>')
+			fetch('https://' + env.data.domain + '/admin.api', {
 				method: "POST",
 				headers: {
 					"Token": 1,
