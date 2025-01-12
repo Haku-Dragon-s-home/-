@@ -1,233 +1,153 @@
-﻿/*
-	This script is used to interact with a database...
-	Last change: 2024/8/27
-*/
+﻿
 
-function sent() {
-	if (wait==0) {
-		var name = document.querySelector('.Tname').value.replace(/\n/g, '');
-		var content = document.querySelector('.Tcontent').value;
 
-		if (name.length <= 0) {
-			if (name.length > 20) {
-				retrun	
-			}
-		}
+/*	script.js
+ *	created by sumiyo, 2025/1/10
 
-		if (content.length <= 0) {
-			if (content.length > 200) {
-				retrun	
-			}
-		}
+	*/
 
-		wait = 1;
-		message('<span class="t-8" ></span> 加载中', 'info', -1);
 
-		fetch('https://tatsuno.top/remark.api', {
-			method: "POST",
-			headers: {
-				"Token": 1
-			},
-			body: JSON.stringify({
-				"name": name,
-				"content": content,
-			})
-		})
-		.then(response => {
-			if (!response.ok) {
-				if (response.status === 429) {
-					fetchfailed();
-				}
-			} else {
-				return response.json();
-			}
-		}); 
 
-		if (errN==0) {
-			document.querySelector('.Tcontent').value = '';
-			document.querySelector('.count').innerHTML = '剩余 200 字';
-			$('.count').css('color', 'rgba(98, 185, 229, 0.8)');
-
-			ComNum = Number(ComNum) + 1;
-			PageAll = Math.ceil(ComNum/10);
-			document.querySelector('.page0').innerHTML = PageAll;
-			document.querySelector('.page').title = '共 ' + ComNum + ' 条留言';
-
-			setTimeout(function (){
-				loadComment(1);
-				page = 1;
-			}, 1500);
-		}
-	}
+const env = {
+	'data': {
+		'db': null,
+		'p': 1,
+		'cn': null,
+		'pn': 1,
+		'isNetwork': (document.domain ? true :false),
+		'version': '1.0.10',
+	},
+	'e': [
+		document.querySelectorAll('footer a')[0],
+		document.querySelectorAll('footer a')[1],
+		document.querySelectorAll('footer a')[2],
+		document.querySelector('.post a'),
+	],
+	'f': {},
+	'timer': {'t1': null},
 }
 
 
 
-function loadComment(page) {
-	fetch('https://tatsuno.top/remark.api', {
+env.f.time = function() {
+	// 获取标准时间
+	var now = new Date()
+	var options = {timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }
+	var formatter = new Intl.DateTimeFormat('en-US', options)
+	var parts = formatter.formatToParts(now).reduce((acc, part) => ({ ...acc, [part.type]: part.value }), {})
+
+	return `${parts.year}-${parts.month}-${parts.day} ${parts.hour}:${parts.minute}:${parts.second}`.replace(/:/g, '').replace(/-/g, '').replace(/ /g, '')
+}
+
+env.f.zoltraak = function(id) {
+	// 删除留言
+	env.f.wait()
+	fetch('https://sumiyo.link/remark.api', {
+		method: "POST",
+		headers: {
+			"Token": 0,
+		},
+		body: JSON.stringify({
+			"id": id,
+		})
+	})
+	.then(response => {
+		if (response.ok) {
+			return response.json()
+		}
+	})
+	.then(json => {
+		env.data.cn --
+		env.data.pn = Math.ceil(env.data.cn / 5)
+		document.getElementById('_2').innerHTML = env.data.cn
+
+		env.f.get(1)
+	})
+	.catch(err => {env.f.err(err)})
+}
+
+env.f.get = function(n) {
+	// 获取留言数据
+	env.data.p = n
+	document.getElementById('_1').innerHTML = n
+
+	fetch('https://sumiyo.link/remark.api', {
 		method: "POST",
 		headers: {
 			"Token": 2,
 		},
 		body: JSON.stringify({
-			"page": (page - 1) * 10,
+			"page": (n - 1) * 5,
 		})
 	})
 	.then(response => {
-		if (!response.ok) {
-			if (response.status === 429) {
-				fetchfailed();
-			}
-		} else {
-			return response.json();
+		if (response.ok) {
+			return response.json()
 		}
 	})
-	.then(json => showComment(json)); 
+	.then(json => {
+		env.data.db = json
+		env.f.load()
+	})
+	.catch(err => {env.f.err(err)})
 }
 
+env.f.load = function() {
+	// 加载留言
+	var d = env.data.db.results
+	var e = document.querySelector('.list')
 
-function showComment(data) {
-	if (errN==0) {
-		var box = document.querySelector('.commentBox');
-		box.style.opacity = '0';
-		box.innerHTML = '';
+	e.innerHTML = ''
+	env.e[0].setAttribute('class', (env.data.pn == 1) ? 'disabled' : '')
+	env.e[1].setAttribute('class', (env.data.p == env.data.pn) ? 'disabled' : '')
 
-		setTimeout(function (){
-			// 获取当前时间
-			var now = new Date();
-			var options = {timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
-			var formatter = new Intl.DateTimeFormat('en-US', options);
-			var parts = formatter.formatToParts(now).reduce((acc, part) => ({ ...acc, [part.type]: part.value }), {});
-			var time = `${parts.year}-${parts.month}-${parts.day} ${parts.hour}:${parts.minute}:${parts.second}`.replace(/:/g, '').replace(/-/g, '').replace(/ /g, '');
+	for (var i = 0; i < d.length; i++) {
+		var span = document.createElement('comment')
+			e.appendChild(span)
 
-			for (var i = 0; i < data['results'].length; i++) {
-				var span = document.createElement('span');
-				span.setAttribute('class', 'comment');
-				box.appendChild(span);
+		var name = document.createElement('name')
+			name.innerText = d[i].name.replace(/\n/g, '') + ':  '
+			span.appendChild(name)
 
-				// 昵称
-				var span1 = document.createElement('span');
-				span1.innerText = data.results[i].name.replace(/\n/g, '') + ':  ';
-				span1.setAttribute('class', 'title');
-				span.appendChild(span1);
+		var cont = document.createElement('span')
+			cont.innerText = d[i].content
+			span.appendChild(cont)
 
-				// 内容
-				var span2 = document.createElement('span');
-				span2.innerText = data.results[i].content;
-				span2.setAttribute('class', 'content');
-				span.appendChild(span2);
+		if (cont.offsetHeight>150) {
+			cont.setAttribute('style', 'height: 150px')
+			var unfold = document.createElement('a')
+				unfold.innerHTML = '[展开]'
+				unfold.setAttribute('class', 'unfold')
+				unfold.setAttribute('onclick', "this.parentNode.querySelector('span').removeAttribute('style'); this.remove()")
+				span.appendChild(unfold)
+		}
 
-				if (span2.offsetHeight>120) {
-					span2.setAttribute('style', 'height: 120px');
+		var info = document.createElement('info')
+			info.innerText = '[' + d[i].id.substring(0, 16) + ']'
+			span.appendChild(info)
 
-					var span4 = document.createElement('span');
-					span4.innerHTML = '[ 展开 ]';
-					span4.setAttribute('class', 'open');
-					span4.setAttribute('onclick', '$(this).css("display", "none");$(this).siblings(".content").css("height", "unset");');
-					span.appendChild(span4);
-				}
-
-				// 日期
-				var span3 = document.createElement('span');
-				span3.innerText = '[' + data.results[i].id.substring(0, 16) + ']';
-				span3.setAttribute('class', 'time');
-				span.appendChild(span3);
-
-				if (data['results'][i]['deletable']=="1") {
-
-					// 超过 7 天的留言无法删除
-					if (parseInt(data.results[i].id.replace(/:/g, '').replace(/-/g, '').replace(/ /g, '')) + 7000000 > parseInt(time)) {
-						var a = document.createElement('a');
-						a.innerHTML = '删除'
-						a.setAttribute('class', 'delete');
-						a.setAttribute('onclick', 'deleteComment("' + data['results'][i]['id'] + '")');
-						span3.appendChild(a);
-					}
-				}
-
-				if (data['results'][i]['deletable']=="0") {
-					var span5 = document.createElement('span');
-					span5.innerHTML = 'admin'
-					span5.setAttribute('class', 'admin');
-					span3.appendChild(span5);
-				}
+		if (d[i].deletable == '1') {
+			if (parseInt(d[i].id.replace(/:/g, '').replace(/-/g, '').replace(/ /g, '')) + 7000000 > parseInt(env.f.time())) {
+				var a = document.createElement('a')
+					a.innerHTML = '[删除]'
+					a.setAttribute('class', 'zoltraak')
+					a.setAttribute('onclick', 'env.f.zoltraak("' + env.data.db['results'][i]['id'] + '")')
+					info.appendChild(a)
 			}
-		}, 500);
+		}
 
-		setTimeout(function (){
-			message.Close()
-			wait = 0;
-			box.style.opacity = '1';
-		}, 1000);
-	}
-}
-
-
-
-function deleteComment(id) {
-	$('#body').addClass('body-scroll');
-	$('.del').fadeIn(200);
-	document.querySelector('.del-id').innerHTML = id;
-	document.querySelector('.delbtn').setAttribute('onclick', 'Delete(`' + id + '`)');
-}
-
-function deleteCancel() {
-	$('.del').fadeOut(200);	
-	$('#body').removeClass('body-scroll');
-}
-
-function Delete(id) {
-	if (wait==0) {
-		wait = 1;
-		$('.del').fadeOut(200);	
-		$('#body').removeClass('body-scroll');
-
-		setTimeout(function (){
-			message('<span class="t-8" ></span> 加载中', 'info', -1);
-			$('#body').removeClass('body-scroll');
-		}, 1000);
-
-		fetch('https://tatsuno.top/remark.api', {
-			method: "POST",
-			headers: {
-				"Token": 0,
-			},
-			body: JSON.stringify({
-				"id": id,
-			})
-		})
-		.then(response => {
-			if (!response.ok) {
-				if (response.status === 429) {
-					fetchfailed();
-				}
-			} else {
-				return response.json();
-			}
-		}); 
-
-		if (errN==0) {
-			ComNum = Number(ComNum) - 1;
-			PageAll = Math.ceil(ComNum/10);
-			document.querySelector('.page0').innerHTML = PageAll;
-			document.querySelector('.page').title = '共 ' + ComNum + ' 条留言';
-
-			setTimeout(function (){
-				loadComment(page);
-			}, 2000);
+		if (d[i].deletable == '0') {
+			name.setAttribute('class', 'op')
 		}
 	}
 }
 
-function init() {
-	page = 1
 
-	if (wait==0) {
-		wait = 1;
-		message('<span class="t-8" ></span> 加载中', 'info', -1);
-		loadComment(page);
-
-		fetch('https://tatsuno.top/remark.api', {
+env.f.init = function() {
+	// 初始化
+	env.f.wait()
+	if (env.data.isNetwork) {
+		fetch('https://sumiyo.link/remark.api', {
 			method: "POST",
 			headers: {
 				"Token": 3,
@@ -235,98 +155,91 @@ function init() {
 			body: JSON.stringify({})
 		})
 		.then(response => {
-			if (!response.ok) {
-				if (response.status === 429) {
-					fetchfailed();
-				}
-			} else {
-				return response.json();
+			if (response.ok) {
+				return response.json()
 			}
 		})
-		.then(json => getComNum(json)); 
+		.then(json => {
+			env.data.cn = Number(json.results[0].content)
+			env.data.pn = Math.ceil(env.data.cn / 5)
+			document.getElementById('_2').innerHTML = env.data.cn
 
-		function getComNum(data) {
-			if (errN==0) {
-				ComNum = Number(data.results[0].content);
-				PageAll = Math.ceil(ComNum/10);
-				document.querySelector('.page0').innerHTML = PageAll;
-				document.querySelector('.page').title = '共 ' + ComNum + ' 条留言';
-			}
+			env.f.get(1)
+		})
+		.catch(err => {env.f.err(err)})
+	}
+}
+
+env.f.submit = function() {
+	// 提交留言
+	var e1 = document.querySelectorAll('textarea')[0]
+	var e2 = document.querySelectorAll('textarea')[1]
+	var n = e1.value.replace(/\n/g, '')
+	var c = e2.value
+	var ban = [' ']
+
+	//  排除违禁词
+	if (ban.some(item => n.includes(item))) {return}
+	if (n.length == 0 || n.length > 20 || c.length == 0 || c.length > 200) {return	}
+
+	env.f.wait()
+	fetch('https://sumiyo.link/remark.api', {
+		method: "POST",
+		headers: {
+			"Token": 1
+		},
+		body: JSON.stringify({
+			"name": n,
+			"content": c,
+		})
+	})
+	.then(response => {
+		if (response.ok) {
+			e2.value = ''
+			e2.removeAttribute('style')
+
+			env.data.cn ++
+			env.data.pn = Math.ceil(env.data.cn / 5)
+			document.getElementById('_2').innerHTML = env.data.cn
+
+			env.f.get(1)
 		}
+	})
+	.catch(err => {env.f.err(err)})
+}
+
+env.f.page = function(n) {
+	// 翻页
+	if (((env.data.p + n) > 0) && ((env.data.p + n) <= env.data.pn)) {
+		env.f.wait()
+		env.e[0].setAttribute('class', (env.data.p + n == 1) ? 'disabled' : '')
+		env.e[1].setAttribute('class', (env.data.p + n == env.data.pn) ? 'disabled' : '')
+
+		env.f.get(env.data.p + n)
 	}
 }
 
-function turnPage(n) {
-	if (wait==0) {
-		if (page + n >= 1) {
-			if (page + n <= PageAll) {
-				wait = 1;
-				message('<span class="t-8" ></span> 加载中', 'info', -1);
+env.f.wait = function() {
+	// 防止触发速率限制
+	clearInterval(env.timer.t1)
+	for (var i = 0; i < env.e.length; i++) {env.e[i].classList.add('wait')}
 
-				page = page + n
-				document.querySelector('.Tpage').value = page;
-				loadComment(page);
-			}
-		}
-	}
+	env.timer.t1 = setInterval(() => {
+		for (var i = 0; i < env.e.length; i++) {env.e[i].classList.remove('wait')}
+		clearInterval(env.timer.t1)
+	}, 3000)
 }
 
-// 日期格式化	blog.csdn.net/qq_42415827/article/details/114630461
-function dateFormatter(formatter, date) {
-	date = (date ? new Date(date) : new Date)
-	const Y = date.getFullYear() + '',
-		M = date.getMonth() + 1,
-		D = date.getDate(),
-		H = date.getHours(),
-		m = date.getMinutes(),
-		s = date.getSeconds()
-	return formatter.replace(/YYYY|yyyy/g, Y)
-		.replace(/YY|yy/g, Y.substr(2, 2))
-		.replace(/MM/g, (M < 10 ? '0' : '') + M)
-		.replace(/DD/g, (D < 10 ? '0' : '') + D)
-		.replace(/HH|hh/g, (H < 10 ? '0' : '') + H)
-		.replace(/mm/g, (m < 10 ? '0' : '') + m)
-		.replace(/ss/g, (s < 10 ? '0' : '') + s)
+env.f.err = function(str) {
+	// 抛出请求错误
+	document.querySelector('.list').innerHTML = '<span>' + str + '</span><br /><br class="f-1" />'
 }
 
 
 
-// 弹窗
-function message(content, type, time) {
-	$('.message-box').html(content);
-	$('.message-box').removeClass('message-info');
-	$('.message-box').removeClass('message-warn');
-	$('.message-box').removeClass('message-error');
-
-	$('.message-box').addClass('message-' + type);
-	$('.message').addClass('message-active');
-	if (time != -1) {
-		setTimeout(function (){
-			$('.message').removeClass('message-active');
-		}, time);
-	}
-
-	// 关闭消息框
-	message.Close=function(){
-		$('.message').removeClass('message-active');
-	}
-}
-
-function fetchfailed() {
-	errN = 1;
-	wait = 1;
-	message.Close();
-	setTimeout(function (){
-		wait = 1;
-		message('<span class="t-8" ></span>　请求速度过快，请稍候', 'info', -1);
-	}, 1000);
-	setTimeout(function (){
-		wait = 0;
-		errN = 0;
-		message.Close();
-	}, 11000);
-} 
 
 
+
+env.f.init()
 
 

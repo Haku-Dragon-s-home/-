@@ -1,265 +1,224 @@
-﻿<!DOCTYPE HTML>
+﻿<!--
+	大陸の遥か北の果て。
+	この世界の人々が天国と呼ぶ場所
+	「魂の眠る地」にたどり着いた。
+	そこは多くの魂が集まる場所で、
+	私はかつての戦友達と対話した。
+
+				ー大魔法使いフランメー
+-->
+
+<!DOCTYPE HTML>
 <html lang="zh">
 
 <head>
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>tatsuno.top/</title>
-	<link rel="shortcut icon" href="src/icon.png?ver=6" />
-	<link rel="stylesheet" href="style.css" />
-	<script src="https://s3.pstatp.com/cdn/expire-1-M/jquery/3.3.1/jquery.min.js"></script>
-	<link rel="preload" as="font" href="src/Poppins Regular.woff2" crossorigin="anonymous" />
-	<link rel="stylesheet" type="text/css" href="css/animation.css" />
-	<link rel="stylesheet" type="text/css" href="css/player.css"  />
-	<link rel="stylesheet" type="text/css" href="css/hint.css" />
 
-	<!-- Mobile Device -->
-	<link rel="stylesheet" type="text/css" media="screen and (max-width: 900px)" href="css/mobile.css" />
+	<title>sumiyo.link</title>
+	<link rel="shortcut icon" href="src/icon.png?ver=7" />
+
+	<link rel="stylesheet" type="text/css" href="style.css" />
+	<link rel="preload" as="font" href="src/Poppins Regular.woff2" crossorigin="anonymous" />
+	<link rel="stylesheet" type="text/css" href="css/player.css"  />
 
 </head>
 
 
 
-<body style="pointer-events: none;" id="body" >
+<body style="pointer-events: none;" >
 <script>
 	// 定义核心变量
-	const env = {data: {}, f: {}, tmp: {}, timer: {}}
-	env.tmp.t1 = new Date()
-	env.data.list = {}
-
-	// 初始化界面
-	function init() {
-		setTimeout(function (){
-			Typewriter();
-			$('.t-21').css('opacity', '1');
-			$('.Avatar').css('transition', '0.5s');
-			$('.footer').fadeIn(300); 
-
-			// 显示菜单按钮
-			$('.menu-btn-1').addClass('fade-in-1');
-			$('.t-36').addClass('fade-in-1');
-			// 激活页面
-			$('#body').removeAttr('style');
-
-			// 弹出问候语
-			env.f.msg('Hello 🎉', 'info', 2500);
-
-		},3000);
-		setTimeout(function (){
-			$('.t-39').addClass('t-3-active');
-		},2000);
-		setTimeout(function (){
-			$('.Avatar').css('opacity', '1'); 
-			$('.t-3').addClass('t-3-active');
-		},1500);
-		setTimeout(function (){
-			$('.Avatar-border').css('opacity', '1'); 
-		},400);
+	const env = {
+		'data': {
+			'version': {},
+			'list': {},
+			'visitors': 0,
+			'domain': 'sumiyo.link',
+			'isNew': null,
+			'isLoad': 0,
+			'isNetwork': (document.domain ? true :false),
+			'isMobile': (window.innerWidth < 900 ? true :false),
+		},
+		'tmp': {
+			't1': new Date(),
+		},
+		'f': {},
+		'timer': {}
 	}
 
-	// 仅允许由 https://tatsuno.top/ 访问此页
-	ShowAlert = 1;
-	if (document.domain!='') {
-		// 重定向备用域名
-		if (document.domain=='tatsuno.pages.dev') {
-			window.location.href = 'https://tatsuno.top/';
-		}
-		if (window.location.href!='https://tatsuno.top/') {
-			ShowAlert = 0;
-			document.getElementById('body').style.display = 'none';
+	env.timer.t1 = setInterval(() => {
+		if (!document.hidden && env.data.isLoad) {
+			setTimeout(function (){
+				if (typeof env.tmp.t4 != 'undefined') {
+					env.f.msg('Hello 🎉', 3000)
+					env.tmp.t4 = null
+					delete env.tmp.t4
+				}
+			},1500)
+			setTimeout(function (){
+				env.f.type()
+				player.f.loadPlayer()
+			},500)
 
-			window.location.href = 'https://tatsuno.top/';
+			document.querySelector('.box-1 header').removeAttribute('style')
+			document.querySelector('.box-2 span').removeAttribute('style')
+			document.querySelector('.avatar').removeAttribute('style')
+			document.body.removeAttribute('style')
+
+			clearInterval(env.timer.t1)
 		}
+	},500)
+
+	// 仅允许直接访问此页
+	if (env.data.isNetwork && (window.location.href != ('https://' + env.data.domain + '/')) && !window.location.href.includes('https://' + env.data.domain + '/blog')) {
+		document.querySelector('body').style.display = 'none'
+		window.location.href = 'https://' + env.data.domain + '/'
 	}
 
 </script>
 
 
 
-
-<!-- Main Code -->
+<!-- 主页 -->
 
 <div class="box-1" >
-	<!-- Header -->
-	<div class="t-36" >
-		<span class="t-37" onclick="env.f.blog.open('page/about')" >About</span>
-		|
-		<span class="t-37" onclick="env.f.blog.open('page/square')" >留言</span>
-	</div>
+	<header style="opacity: 0;" >
+		<a onclick="env.f.blog.open('page/square')" >Square</a>|<a onclick="env.f.blog.open('page/about')" >About</a>
+		<btn1 onclick="env.f.menu.open()" ></btn1>
+		<btn2 onclick="env.f.menu.close()" style="display: none;" ></btn2>
+	</header>
 
 	<div class="box-2" >
-		<span class="t-3" >tatsuno<span class="t-40 rotate-1"></span></span>
-		<span class="t-39" >のサイトです。</span>	
-		<div class="t-4" >
-			<div class="Typewriter-1" onclick="Typewriter();" ></div>
-		</div>
-		<div class="Avatar-border" >
-			<div class="Avatar-border-inner" >
-				<img class="Avatar" src="src/Chika.webp" onload="init()" />
-				<div class="t-21">
-					<a target="_blank" href="src/Chika Shirakawa「白川千歌」.png" download="Chika Shirakawa「白川千歌」.png" ></a>
-					<span class="hint--bottom hint--rounded" data-hint="こんにちは！
-あたしは白川だよ。北方からのキツネです。
-コン、コンコンーー" ></span>
-				</div>
-			</div>
-		</div>
+		<span style="opacity: 0;" >sumiyo</span>
+		<type></type>
 	</div>
 
-	<!-- Blog Iframe -->
-	<div class="blog" >
-		<iframe name="frame" class="iframe" id="iframe" ></iframe>
-	</div>
+	<!-- 大胆的设计，让我们摆脱了头像框的传统限制 -->
+	<img class="avatar" src="src/sumiyo.webp" style="transform: scale(1.02); opacity: 0;" onload="env.data.isLoad = true" />
 
+	<!-- 博客框架 -->
+	<div class="blog" style="display: none;" >
+		<btn1 onclick="env.f.blog.close()" ></btn1>
+	</div>
 </div>
 
 
 
-<div class="FixedBox" >
+<!-- 菜单  -->
 
-	<!-- Menu  -->
-	<div class="menu-btn-1" onclick="env.f.menu.open()" ></div>
-	<div class="menu-btn-2" onclick="env.f.menu.close()" ></div>
-	<div class="menu-btn-3" onclick="env.f.blog.close()" ></div>
+<div class="menu" >
+	<h1>MENU.</h1>
+	<hr />
 
-	<div class="menu" >
-		<div class="menu-title" >
-			MENU.
-		</div>
-		<hr style="border: none; border-top: 1px solid rgba(100, 102, 102, 0.3); width: 250px; margin-left: 0px;" />
-
-		<!-- 博客面板 -->
-		<div class="menu-box" style="margin-top: 10px;" >
-			<div class="menu-btn" onclick="env.f.menu.c1()" >
-				<div class="menu-check menu-check-active" id="menu-check-1" ></div>博客<span style="line-height: 18px; font-size: 18px;">「<span class="blog-num" >0</span>」</span>
+	<!-- 博客 -->
+	<div style="margin-top: 10px;" >
+		<btn onclick="env.f.menu.c1()" >
+			<div class="btn-active" id="menu-c1" ></div>检索:<span class="search-title" ><span id="_1" >0</span> items</span>
+		</btn>
+		<div class="menu-c1" >
+			<div class="search" >
+				<textarea type="text" oninput="this.value = this.value.replace(/\n/g, '')" onfocus="this.select();" maxlength="16" autocomplete="off" ></textarea><span></span>
+				<list><div style="display: none;" class="null" >没有找到指定内容...</div></list>
 			</div>
-
-			<div class="MenuCheck1-inner" >
-				<div id="search" >
-					<textarea type="text" id="searchInput" onfocus="this.select();" maxlength="14" placeholder="/search" autocomplete="off" ></textarea><span class="t-38" ></span>
-					<ul class="search-result" ></ul>
-					
-				</div>
-			</div>
-		</div>
-
-		<!-- 通知 -->
-		<div class="menu-box" style="margin-top: 0px;" >
-			<div class="menu-btn" onclick="env.f.menu.c2()" >
-				<div class="menu-check menu-check-active" id="menu-check-2" ></div>通知.
-			</div>
-
-			<div class="MenuCheck2-inner" >
-				<div class="news-box" ></div>
-				<div class="news-box" ></div>
-				<div class="news-box" ></div>
-				<div class="news-box" ></div>
-				<div class="news-box" ></div>
-			</div>
-		</div>
-
-		<!-- 联系 -->
-		<hr style="border: none; border-top: 1px solid rgba(100, 102, 102, 0.3); width: 250px; margin-top: 60px; margin-left: 0px;" />
-		<div class="menu-box" style="margin-top: 10px;" >
-			<div class="menu-btn" onclick="env.f.menu.c3()" >
-				<div class="menu-check menu-check-active" id="menu-check-3" ></div>联系我.
-			</div>
-
-			<div class="MenuCheck3-inner" >
-				<a href="https://music.163.com/#/user/home?id=6288053607" target="_blank" class="t-18" style="margin-left: 25px;" >
-					<img src="src/footer/网易云音乐.png" class="t-15" />
-				</a>
-				<a href="https://space.bilibili.com/3494354685528792" target="_blank" class="t-18" >
-					<img src="src/footer/bilibili.png" class="t-15" />
-				</a>
-				<a href="https://github.com/Dragoft" target="_blank" class="t-18" >
-					<img src="src/footer/github.png" class="t-15" />
-				</a>
-				<a href="mailto:yuu@tatsuno.top" target="_blank" class="t-18" >
-					<img src="src/footer/mail.png" class="t-15" />
-				</a>
-
-			</div>
-		</div>
-
-		<!-- 协议 -->
-		<div class="menu-policy" >
-			<span class="t-41" onclick="env.f.blog.open('page/policy')" >Privacy & Copyright</span>
 		</div>
 	</div>
 
+	<!-- 通知 -->
+	<div>
+		<btn onclick="env.f.menu.c2()" >
+			<div class="btn-active" id="menu-c2" ></div>通知
+		</btn>
+		<div class="menu-c2" ></div>
+	</div>
 
+	<hr style="margin-top: 80px;" />
 
-	<!-- Player   V. 1.19 -->
-	<div class="Player" >
-
-		<!-- COVER -->
-		<div class="MusicImgBox" onclick="player.f.menu()" >
-			<img class="MusicImg" onload="$('.Player').addClass('Player-active')" id="load-img" />
+	<!-- 联系 -->
+	<div style="margin-top: 10px;" >
+		<btn onclick="env.f.menu.c3()" >
+			<div class="btn-active" id="menu-c3" ></div>联系
+		</btn>
+		<div class="menu-c3" >
+			<a href="mailto:me@sumiyo.link" target="_blank" >me@sumiyo.link<span></span></a>
 		</div>
-		<div class="bar2" ><div class="bar0" ><div class="bar1" ></div></div></div>
+	</div>
 
-		<div class="Player-menu" >
-			<span class="list-head" >歌曲列表 <a href="javascript:;" onclick="player.f.reset()" class="resetList" title="重置歌单" ></a></span>
-			<a href="javascript:;" onclick="player.f.mode()" id="Mod" title="列表循环" ></a>
-			<span href="javascript:;" class="Player-menu-sound0" >0</span>
-			<span href="javascript:;" class="Player-menu-sound1" title="使用鼠标滑轮调整音量" ><span href="javascript:;" class="Player-menu-sound2"></span></span>
+	<!-- 协议 -->
+	<div class="menu-footer" >
+		<a onclick="env.f.blog.open('page/policy')" >「 Privacy & Copyright 」</a>
+	</div>
+</div>
 
-			<hr class="list-line" />
-			<div class="PlayerList" >
-				<div class="PlayerListInner" ></div>
+
+
+<!-- 播放器  -->
+
+<div class="player" >
+	<audio preload="none" ></audio>
+	<div class="player-menu" style="display: none" >
+		<div class="player-header" >
+			<a onclick="player.f.lrc.gui()" >歌词</a> | <a onclick="player.f.reset()" >重置</a>
+			<div class="player-header-right" >
+				<span class="player-sound0" ></span><span class="player-sound1" title="音量" ><div></div></span>
+				<a onclick="player.f.mode()" title="列表循环" ></a>
 			</div>
 		</div>
-		<div class="Player-menu-info" >
-			<div class="Player-menu-info-title" >
-				这篇文章自带了 1 首音乐哦，
-				<br />
-				想要听听吗？
-				<br />
-				<span style="float: right; user-select: none;" >
-					<a class="Player-menu-info-button Player-menu-info-open" >打开</a> | <a class="Player-menu-info-button" onclick="player.f.add.ask(0)" >关闭</a>
-				</span>
-			</div>
-		</div>
-		<div class="PlayerButton PlayerButton-pause" onclick="player.f.play()" ></div>
-		<div class="MusicName" ></div>
-		<audio id="player" src="https://music.163.com/song/media/outer/url?id=448316625.mp3" preload="none" ></audio>
-		<a href="javascript:;" onclick="player.f.show()" class="MusicShow0 f-3" ></a>
-		<a href="javascript:;" onclick="player.f.show()" class="MusicShow1 f-3" ></a>
+		<div class="player-list" ><div></div></div>
 	</div>
-
-
-
-	<!-- Footer -->
-	<div class="footer">
-	<div class="footer-inner" >
-		<div class="footer-box-1" >
-			<!-- To give the sincerest thanks -->
-			<span class="footer-t1 footer-t2" >技术支持:</span>
-			<a class="footer-t3 hint--top hint--rounded" onclick="window.open('https://www.cloudflare.com/')" target="_blank" data-hint="Cloudflare" >
-				<img src="src/footer/cloudflare.png" style="opacity: 0" onload="$(this).addClass('fade-in-1')" id="load-img" />
-			</a>
-		</div>
-		<div class="footer-box-2" >
-			<!-- 成就 -->
-			<span class="footer-t4 footer-t1" > | 
-				<span style="user-select: text;" ><span id="onlineDate" >0</span> 天<span style="display: none;" id="visit_counter_outer" > & <span id="visit_counter">0</span> 访客</span></span>
-			</span>
-		</div>
+	<div class="player-ask" style="display: none;" >
+		这篇文章附有 1 首音乐，<br />想要听听吗？<br />
+		<span><a>加载</a> | <a onclick="player.f.add.ask(0)" >取消</a></span>
 	</div>
+	<div class="player-ui" >
+		<div class="player-btn player-btn0" onclick="player.f.play()" ></div>
+		<div class="player-name" ></div>
+		<div class="player-bar0" ><div class="player-bar1" ><div></div></div></div>
 	</div>
+	<div class="player-cover" onclick="player.f.menu();" ><img onload="player.f.loadPlayer()" /></div>
+	<a onclick="player.f.show()" class="player-mobile0 f-3" ></a>
+	<a onclick="player.f.show()" class="player-mobile1 f-3" ></a>
+
+</div>
+<div class="player-lrc" style="display: none;" >
+	<img onload="env.f.fade(player.e.lrcI, 500)" />
+	<cover></cover>
+
+	<!-- 这个 headerSide 模仿了 frieren-anime.jp/ 的设计 -->
+	<div class="player-title" ><span></span></div>
+	<list></list>
+	<header>
+		<btn1 onclick="player.f.lrc.gui()" ></btn1>
+		<div class="player-btn player-btn0" onclick="player.f.play()" ></div>
+		<div class="player-kana" onclick="player.f.kana()" style="display: none;" >あ</div>
+	</header>
+</div>
 
 
 
-	<!-- MESSAGE   V. 1.0.0 -->
-	<div class="message" >
-		<div class="message-box" >content</div>
+<!-- 页脚 -->
+
+<footer>
+	<div class="f-2" >
+		<!-- 简短但真挚的感谢 -->
+		项目支持: <a onclick="window.open('https://www.cloudflare.com/')" target="_blank" style="cursor: help;" >Cloudflare</a>
 	</div>
-	<div class="pageloading" >
-		<div class="pageloading0 shining-1" >page.loading(): ...</div>
-		<div class="pageloading1" >Err: page loading timeoout (>20000 ms)</div>
+	<div style="opacity: 0;">
+		<!-- 小小的成就 -->
+		<span style="user-select: none;"> | </span><span id="_3">0</span> 天 & <span id="_2">0</span> 访客
 	</div>
+</footer>
+
+
+
+<!-- 弹窗 -->
+
+<div class="message" ><div></div></div>
+<div class="loading" style="display: none;" >
+	<box1><div>ロード中ですよ...</div></box1>
+	<box2>LOAD: <span></span></box2>
+</div>
 
 
 
@@ -267,42 +226,21 @@
 
 
 <!-- Javascript -->
-	<script>
-		// 自检
-		env.tmp.t2 = ''
-		setTimeout(function (){
-			if(env.tmp.t2 == 'ok'){
-				setTimeout(console.log.bind(
-					console,
-					'%cPage self-check: %cSUCCESS',
-					'color: rgba(100, 102, 102, 0.8); font-weight: bolder;',
-					'color: rgba(0, 200, 100, 1); font-weight: bolder;'
-				));
-				setTimeout(console.groupEnd.bind());
-			} else {
-				$('.message-box').html('Failed to load "script. js" (TIMEOUT)　<a onclick="location.reload();" href="javascript:;" style="color: rgb(170, 17, 17);" ><ins>Refresh</ins></a>');
-				$('.message-box').addClass('message-error');
-				$('.message').addClass('message-active');
+	<script src="blog\staticDB.js" ></script>
+	<script src="script.js" ></script>
+	<script src="js\player.js"></script>
 
-				setTimeout(console.log.bind(
-					console,
-					'%cPage self-check: %cTIMEOUT',
-					'color: rgba(100, 102, 102, 0.8); font-weight: bolder;',
-					'color: rgba(255, 0, 20, 1); font-weight: bolder;'
-				));
-				setTimeout(console.groupEnd.bind());
+	<script>
+		// 检查页面加载情况
+		setTimeout(function (){
+			if (!env.tmp.t2) {
+				document.querySelector('.message').children[0].innerHTML = '页面加载失败　<a onclick="location.reload();" href="javascript:;" style="color: rgba(var(--t-b1), 0.8);" ><ins>刷新</ins></a> / <a onclick="env.data.isLoad = 1" href="javascript:;" style="color: rgba(var(--t-b1), 0.8);" ><ins>强制加载</ins></a>'
+				document.querySelector('.message').classList.add('message-active')
 			}
 			env.tmp.t2 = null
 			delete env.tmp.t2
-		}, 10000);
+		}, 30000)
 	</script>
-	<script src="blog\staticDB.js" ></script>
-	<script src="js\search.js"></script>
-	<script src="js\typed.js"></script>
-	<script src="script.js" ></script>
-	<script src="js\player.js"></script>
-	<script src="js\url.js"></script>
-
 </body>
 
 

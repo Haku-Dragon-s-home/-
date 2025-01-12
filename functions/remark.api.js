@@ -38,7 +38,7 @@
 
 	// 读取留言数据
 	if (mod == "2") {
-		reData = await context.env.MetaDB.prepare('SELECT * FROM comment ORDER BY id DESC LIMIT ?, 10').bind(cont.page).all()
+		reData = await context.env.MetaDB.prepare('SELECT * FROM comment ORDER BY id DESC LIMIT ?, 5').bind(cont.page).all()
 		reData.msg = 'page: ' + cont.page
 	}
 

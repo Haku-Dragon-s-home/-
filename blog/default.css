@@ -1,0 +1,399 @@
+﻿
+:root {
+	/* 主题颜色 */
+	--t-c1: 186, 138, 219;
+	--t-c2: 123, 96, 202;
+	--t-c3: 255, 184, 237;
+	--t-c4: 143, 93, 213;
+	--t-c5: 255, 184, 237;
+
+	/* 文本颜色 */
+	--t-t1: 100, 102, 102;
+
+	/* 背景颜色 */
+	--t-b1: 255, 255, 255;
+	--t-b2: 0, 0, 0;
+	--t-b3: 244, 243, 241;
+	--t-b4: 40, 40, 40;
+
+	--t-r: 255, 0, 20;
+	--t-g: 0, 200, 100;
+}
+
+
+
+@font-face {
+	font-family: Poppins Regular;
+	src: url('../src/Poppins Regular.woff2');
+}
+
+html {
+	height: 100%;
+	width: 100%;
+}
+
+body {
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	font-family: 'Poppins Regular',  'Microsoft YaHei'; 
+	overflow: overlay;
+	margin: 0;
+	line-height: 32px;
+	min-width: 380px;
+}
+
+
+
+/* 滚动条 */
+
+::-webkit-scrollbar {
+
+	width: 12px !important;
+	height: 12px !important;
+	background-color: transparent !important;
+}
+
+
+::-webkit-scrollbar-track {
+
+	background-color: transparent !important;
+	box-shadow: none !important;
+}
+
+
+::-webkit-scrollbar-thumb {
+
+	background-color: rgba(var(--t-t1), 0.1) !important;
+	border-radius: 100px !important;
+	border: 4px solid transparent !important;
+	background-clip: content-box !important;
+	box-shadow: none !important;
+}
+
+
+::-webkit-scrollbar-thumb:hover {
+
+	background-color: rgba(var(--t-t1), 0.2) !important;
+}
+
+::-webkit-scrollbar-corner {
+	background-color: transparent !important;
+	box-shadow: none !important;
+}
+
+
+
+::selection {
+	background: rgba(var(--t-c5), 0.3) !important;
+}
+
+
+
+/* 预设样式 */
+
+a {
+	text-decoration: none;
+	-webkit-user-drag: none;
+}
+
+img {
+	user-select: none;
+	-webkit-user-drag: none;
+	opacity: 0;
+}
+
+para {
+	display: block;
+	padding-bottom: 100px;
+}
+
+code {
+	display: block;
+	background-color: rgba(var(--t-c1), 0.15);
+	color: rgba(var(--t-c1), 0.6);
+	padding: 6px 12px 6px 12px;
+	font-family: 'Microsoft YaHei';
+	line-height: 28px;
+	font-size: 16px;
+	border-radius: 5px;
+	white-space: pre-line;
+}
+
+code note {
+	color: rgba(var(--t-c1), 1);
+	user-select: none;
+	pointer-events: none;
+}
+
+code attention {
+	background-color: rgba(var(--t-c1), 0.6);
+	color: rgba(var(--t-b1), 0.8);
+}
+
+span {
+	color: rgba(var(--t-t1), 0.6);
+	font-size: 16px;
+	line-height: 30px;
+}
+
+i {
+	color: rgba(var(--t-t1), 0.4);
+}
+
+h1 {
+	color: rgba(var(--t-t1), 0.8);
+	font-size: 40px;
+}
+
+h2 {
+	color: rgba(var(--t-t1), 0.8);
+	font-size: 25px;
+	height: 45px;
+	border-bottom: 1px rgba(var(--t-t1), 0.2) solid;
+}
+
+h2:after {
+	content: " # ";
+	color: rgba(var(--t-c1), 0.8);
+}
+
+h3 {
+	color: rgba(var(--t-t1), 0.7);
+	font-size: 20px;
+	margin: 0;
+}
+
+hr1,
+hr2,
+hr3 {
+	display: block;
+	height: 10px;
+	margin-top: 10px;
+	border-top: 1px rgba(var(--t-t1), 0.2) solid;
+}
+
+hr1 {
+	width: 100%;
+}
+
+hr2 {
+	width: 80%;
+}
+
+hr3 {
+	width: 60%;
+}
+
+li {
+	list-style: none;
+	color: rgba(var(--t-t1), 0.6);
+}
+
+.list1:before {
+	content: "\ea56";
+	color: rgba(var(--t-c1), 1);
+	margin-right: 10px;
+	font-size: 14px;
+}
+
+.list2:before {
+	content: "\ea56";
+	color: rgba(var(--t-c1), 0.8);
+	margin-right: 10px;
+	margin-left: 25px;
+	font-size: 14px;
+}
+
+.list2 {
+	color: rgba(var(--t-t1), 0.5);
+}
+
+
+.list3:before {
+	content: "\ea56";
+	color: rgba(var(--t-c1), 0.6);
+	margin-right: 10px;
+	margin-left: 50px;
+	font-size: 14px;
+}
+
+.list3 {
+	color: rgba(var(--t-t1), 0.4);
+}
+
+.link {
+	color: rgba(var(--t-c1), 1);
+	text-decoration: underline;
+	text-decoration-color: rgba(var(--t-t1), 0.2);
+	font-family: "Microsoft YaHei";
+	cursor: pointer;
+	transition: 0.3s;
+
+}
+
+.link:hover {
+	text-decoration-color: rgba(var(--t-c1), 1);
+}
+
+quote {
+	display: block;
+	color: rgba(var(--t-t1), 0.6);
+	background-color: rgba(var(--t-c1), 0.15);
+	padding: 10px 15px 10px 10px;
+	border-left: rgba(var(--t-c1), 0.6) solid 5px;
+	border-radius: 0px 7px 7px 0px;
+	word-break: break-all;
+	line-height: 26px;
+}
+
+attention {
+	display: inline-block;
+	background-color: rgba(var(--t-c1), 0.15);
+	color: rgba(var(--t-c1), 1);
+	padding: 0px 8px 0px 8px;
+	line-height: 27px;
+	border-radius: 5px;
+}
+
+showcase {
+	display: inline-block;
+	width: 45%;
+	vertical-align: top;
+	word-break: break-all;
+	padding-right: 10px;
+}
+
+mat {
+	display: block;
+	width: 100%;
+	height: 5px;
+	pointer-events: none;
+}
+
+box1 {
+	display: block;
+	width: calc(100% - 28px);
+	margin-left: 28px;
+}
+
+thead tr th {
+
+	background-color: rgba(var(--t-c1), 0.5);
+	color: rgba(var(--t-b1), 1);
+	min-width: 80px;
+	text-align: left;
+	font-weight: lighter;
+}
+
+
+table {
+	border-collapse: collapse;
+	border: 1px rgba(var(--t-t1), 0.1) solid;
+	border-radius: 8px;
+	overflow: hidden;
+	box-shadow: 1px 1px 1px 0px rgb(var(--t-b2), 0.1);
+}
+
+
+td,
+th {
+	vertical-align: top;
+	padding: 5px 10px;
+	color: rgba(var(--t-t1), 0.6);
+}
+
+
+tr:nth-child(even) {
+
+	background-color: rgb(237, 243, 247);
+}
+
+
+tr:nth-child(odd) {
+
+	background-color: rgb(249, 251, 252);
+}
+
+.table-side {
+	background-color: rgba(var(--t-c1), 0.6);
+	color: white;
+	font-weight: bolder;
+}
+
+.main {
+	margin: 0px auto;
+	padding: 360px 0px 200px 0px;
+	width: 900px;
+}
+
+
+
+@keyframes fade {
+	0% {
+		opacity: 0;
+	}
+	50% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+.fade {
+	animation: fade 1s ease-in;
+	animation-fill-mode:forwards;
+}
+
+
+
+/* 功能样式 */
+
+.f-1 {
+	/* 无效元素 */
+	-webkit-user-select: none;
+	pointer-events: none;
+}
+
+.f-2 {
+	/* 仅在 PC 端显示 */
+	display: unset;
+}
+
+.f-3 {
+	/* 仅在移动端显示 */
+	display: none;
+}
+
+
+
+@media screen and (max-width: 900px) {
+	::-webkit-scrollbar {
+		display: none !important;
+	}
+	.main {
+		margin: 0px auto;
+		padding: 200px 0px 80px 0px;
+		width: 90%;
+	}
+	.f-2 {
+		/* 仅在 PC 端显示 */
+		display: none;
+	}
+	.f-3 {
+		/* 仅在移动端显示 */
+		display: unset;
+	}
+	showcase {
+		width: 100%;
+		display: block;
+	}
+	showcase:nth-child(even) {
+
+		margin-left: 0px;
+	}
+
+}
+
+

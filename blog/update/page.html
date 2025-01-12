@@ -2,29 +2,59 @@
 <html lang="zh">
 
 <head>
-	<title></title>
+	<title>-</title>
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<script src="https://s3.pstatp.com/cdn/expire-1-M/jquery/3.3.1/jquery.min.js"></script>
+
 	<link rel="preload" as="font" href="../../src/Poppins Regular.woff2" crossorigin="anonymous" />
-	<link rel="stylesheet" type="text/css" href="../main.css">
+	<link rel="stylesheet" type="text/css" href="../default.css">
 	<link rel="stylesheet" type="text/css" href="style.css">
 
 </head>
 
 <body>
 <script>
-	window.parent.postMessage('env.f.page.ok("- ' + document.title + '")', document.domain.length == 0 && '*' || '/');
-	history.pushState(null, null, location.href);
-
+	window.parent.postMessage('env.f.page.ok("' + document.title + '")', document.domain ? '/' : '*')
 	window.addEventListener('message', function(event) {
-		if (event.origin == 'null' || event.origin.includes('https://tatsuno.top')) {
-			eval(event.data);
-		}
-	});
+		if (event.origin == 'null' || event.origin.includes('https://sumiyo.link')) {eval(event.data)}
+	})
+
+	var music = {
+		name: 'Moon Child - 西原健一郎 & Nina Vidal',
+		src: '456041',
+		img: 'jBO0wfjt5-AprTRmDzhtcQ==/6057209557711541',
+		act: {lrc: true, js: null}
+	}
+
+	window.parent.postMessage('player.f.add.ask(1, "' + music.name + '", "' + music.src + '", "' + music.img + '", ' + music.act.lrc + ', "' + music.act.js + '" )', document.domain ? '/' : '*')
 
 </script>
+<style>
+
+	.imgBox1 {
+		aspect-ratio: 1 / 1;
+		width: 50%;
+		display: inline-block;
+	}
+
+	.imgBox1 img {
+		vertical-align: text-top;
+		width: 100%;
+		height: 100%;
+		border-radius: 10px;
+		opacity: 0;
+		border: 1px rgba(151, 153, 153, 0.3) solid;
+		box-sizing: border-box;
+	}
+
+	@media screen and (max-width: 900px) {
+		.imgBox1 {
+			width: 100%;
+		}
+	}
+
+</style>
 
 	<!-- Mian -->
 	<div class="main" >
@@ -33,11 +63,14 @@
 		<i>—— 介绍</i>
 		<br />
 		<br class="f-1" />
+		<para>
+			<span>内容</span>
+		</para>
 
 		<quote>
 			引述内容
 			<br />
-			<i style="display: block; text-align: right; color: rgba(151, 153, 153, 0.5);" >—— 未知出处</i>
+			<i style="display: block; text-align: right;" >—— 未知出处</i>
 		</quote>
 		<br />
 
@@ -46,6 +79,10 @@
 		<br />
 
 		<a class="link" href="https://kotobank.jp/" target="_blank"> kotobank.jp/</a>
+		<br />
+		<br />
+
+		<span class="link" onclick="window.parent.postMessage(`env.f.linkto('20240917')`, document.domain ? '/' : '*')" >id=20240917/</span>
 		<br />
 		<br />
 
@@ -84,29 +121,27 @@
 		<br />
 		<br />
 
-<code><note># 注释</note>
-代码
+<code><attention>js/script.js</attention>
+
+<note># 注释</note>
+Hello world!
 
 </code>
 		<br />
 		<br />
 
-		<img class="" src="../../src/readme.png" onload="$(this).addClass('fade-in-1')" />
+		<hr1></hr1>
+		<hr2></hr2>
+		<hr3></hr3>
+		<br />
+		<br />
+		<a class="imgBox1"  target="_blank" href="../../src/sumiyo.png" >
+			<img src="../../src/sumiyo.png" onload="this.setAttribute('class', 'fade')" />
+		</a>
 
 <br />
 
 <pre>
-
-绿 113, 199, 173
-粉 244, 183, 188
-白 244, 243, 241
-灰 227, 229, 229
-灰 192, 194, 194
-黑 100, 102, 102
-黑 151, 153, 153
-蓝 217, 227, 252
-蓝 167, 208, 230
-
 	.f-1 无效元素
 	.f-2 仅在电脑端显示的元素
 	.f-3 仅在移动端显示的元素

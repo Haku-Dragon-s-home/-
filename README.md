@@ -1,43 +1,15 @@
-<div align="center">
-	<img src="https://tatsuno.top/src/readme.png" width="120px" />
-	<h3>S E K A I</h3>
-	<i>¼«¼ò·ç¸ñµÄ¸öÈËÍøÕ¾Ö÷Ìâ.</i>
-</div>
-
-
-
-## ½éÉÜ
->`S E K A I`¡¸¤»¤«¤¤¡¹ÊÇÒ»¿îÊ¹ÓÃ Cloudflare Pages ²¿ÊğµÄÏìÓ¦Ê½²©¿ÍÖ÷Ìâ¡£<br /><br />UI Éè¼ÆÊÜµ½ÁË [kotobank.jp/](https://kotobank.jp/) µÄÆô·¢£¬Ö÷Ìå´úÂëÓÉ `Tatsuno Yuu` ±àĞ´¡£<br />Îª±£Ö¤ÍøÕ¾µÄ¶ÀÌØĞÔ£¬´ËÖ÷Ìâ **Ôİ²»ÊÚÈ¨ÈÎºÎĞÎÊ½µÄÊ¹ÓÃ** µ«ÄãÈÔ¿ÉÒÔÑ§Ï°ËüµÄÔ´Âë£¨²»ÏÓÆúÎÒÔã¸âµÄ´úÂë¾ÍĞĞ£©
+ï»¿
+## INTRO
+>ã—ã‚ã„èŠ±ã€ŒShiroihanaã€â€”â€” A responsive blog theme based on Cloudflare Pages.<br /><br />Completed by `sumiyo` , the inspiration for the UI design comes from [kotobank.jp/](https://kotobank.jp/). Currently, compatibility **CAN NOT** be guaranteed on mobile device, Firefox and IE, as it has only been tested on the PC Chrome.<br />**NO FORM OF USE IS PERMITTED**
 
 <br />
 
-## Ö÷Ìâ²¿Êğ
->ÓÉÓÚ¶ÔÔ´ÂëÊ¹ÓÃµÄÏŞÖÆ£¬ÕâÀï²»Ìá¹©Ö÷ÌâµÄ²¿Êğ·½·¨¡£SQL Êı¾İ¿â½á¹¹±£ÃÜ¡£<br />P.S.: ´Ë Github ÕËºÅ³¤ÆÚÀëÏß£¬ÇëÍ¨¹ıÆäËû·½Ê½ÁªÏµ×÷Õß¡£
+## THANK
 
-<br />
-
-## Ê¹ÓÃµÄ¼¼Êõ
-* **Cloudflare ·şÎñ**
-	* Pages
-	* Pages Function
-	* D1 Êı¾İ¿â
-	* Cloudflare Web Analytics
-* **Ç°¶Ë**
-	* iframe ²©¿ÍÒ³ÃæÇ¶Ì×
-	* JavaScript postMessage Ò³ÃæÍ¨ĞÅ
-	* CSS ÏìÓ¦Ê½Éè¼Æ
-
-<br />
-
-## ¸ĞĞ»
-¸ĞĞ»ËûÃÇÔÚ¿ª·¢ÆÚ¼äÌá¹©µÄ°ïÖú¡£
-
-|	Ãû³Æ					|	°ïÖú				|
+|	ITEM					|	DESCRIPTION			|
 |:--------						|:---------					|
-|	[Cloudflare](https://www.cloudflare.com/)		|	ÍøÕ¾ÔËĞĞ & ¹ÜÀí			|
-|	[Github](https://github.com/)			|	´úÂëÍĞ¹Ü				|
-|	[ÍøÒ×ÔÆÒôÀÖ](https://music.163.com/)		|	Ìá¹©ÒôÀÖÍâÁ´·şÎñ			|
-|	[IcoMoon](https://icomoon.io/)			|	Í¼±ê×ÖÌå				|
-|	[Hint.css](https://kushagra.dev/lab/hint/)		|	A pure CSS tooltip library		|
-|	[Paint.NET](https://www.getpaint.net/)		|	Í¼Ïñ´¦ÀíÈí¼ş			|
+|	[Cloudflare](https://www.cloudflare.com/)		|	Connect, protect, and build everywhere	|
+|	[Github](https://github.com/)			|	Let's build from here			|
+|	[IcoMoon](https://icomoon.io/)			|	SVG icon font organizer		|
+|	[Paint.NET](https://www.getpaint.net/)		|	Free software for digital photo editing	|
 

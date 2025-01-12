@@ -2,84 +2,173 @@
 <html lang="zh">
 
 <head>
-	<title>about</title>
+	<title>About</title>
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 	<link rel="preload" as="font" href="../../../src/Poppins Regular.woff2" crossorigin="anonymous" />
-	<link rel="stylesheet" type="text/css" href="../../main.css">
-	<link rel="stylesheet" type="text/css" href="../../../css/hint.css">
+	<link rel="stylesheet" type="text/css" href="../../default.css">
 
 </head>
 
 <body>
 <script>
-	window.parent.postMessage('env.f.page.ok("- ' + document.title + '")', document.domain.length == 0 && '*' || '/');
-	history.pushState(null, null, location.href);
-
+	window.parent.postMessage('env.f.page.ok("' + document.title + '")', document.domain ? '/' : '*')
 	window.addEventListener('message', function(event) {
-		if (event.origin == 'null' || event.origin.includes('https://tatsuno.top')) {
-			eval(event.data);
-		}
-	});
+		if (event.origin == 'null' || event.origin.includes('https://sumiyo.link')) {eval(event.data)}
+	})
+
+	var music = {
+		name: 'The Precious Moments We Share - Evan Call',
+		src: '2146702250',
+		img: 'n21kvn_4tw2AFdVHJX4bjg==/109951169594833348',
+		act: {lrc: false, js: null}
+	}
+
+	window.parent.postMessage('player.f.add.ask(1, "' + music.name + '", "' + music.src + '", "' + music.img + '", ' + music.act.lrc + ', "' + music.act.js + '" )', document.domain ? '/' : '*')
 
 </script>
+<style>
+
+	.imgBox1 {
+		aspect-ratio: 200 / 280;
+		width: 20%;
+		display: inline-block;
+		background-color: rgba(var(--t-b2), 0.1);
+		border-radius: 8px;
+	}
+
+	.imgBox1 img {
+		display: block;
+		width: 100%;
+		height: 100%;
+		border-radius: 8px;
+		opacity: 0;
+	}
+
+	.details {
+		position: sticky;
+		padding: 5px 10px;
+		height: 60px;
+		display: block;
+		margin-top: -70px;
+		border-radius: 0px 0px 5px 5px;
+		background: rgba(var(--t-b2), 0.5);
+		color: rgba(var(--t-b1), 0.8);
+		backdrop-filter: blur(5px);
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		opacity: 0;
+		transition: 0.5s;
+	}
+
+	.details i {
+		color: rgba(var(--t-b1), 0.4);
+		font-style: normal;
+		user-select: none;
+	}
+
+	.imgBox1:hover .details {
+		opacity: 1;
+	}
+
+	@media screen and (max-width: 900px) {
+		.details {
+			display: none;
+		}
+
+		.imgBox1 {
+			width: 32%;
+		}
+	}
+
+</style>
 
 	<!-- Mian -->
 	<div class="main" >
 
 		<h1>关于</h1>
-		<i>—— 用一段简单的自我介绍拥抱世界！</i>
+		<i>—— 用一段简单的自我介绍拥抱世界。</i>
 		<br />
 		<br class="f-1" />
-		<span>你好！</span>
-		<br />
-		<span>我是 tatsuno，一个普普通通的高中生。很高兴能在这里遇见你！</span>
-		<br class="f-2" />
-		<span class="f-2">先简单的自我介绍一下。</span>
-		<br />
-		<br class="f-1" />
-		<quote>
-			<span style="color: rgb(73, 160, 204);" >TATSUNO</span>
+		<para>
+			<hr1></hr1>
+			<mat></mat>
+			<span>你好！</span>
 			<br />
-			其实是个日本姓氏，没什么特别的寓意。可以写作「 竜野、龍野、辰野 ...... 」
-		</quote>
-		<br class="f-1" />
-		<br class="f-1" />
+			<span>很高兴能在这里遇见你！按照规矩，先简单的自我介绍一下。</span>
+		</para>
 
-		<h2>好きな物</h2>
-		<li class="list1" >Anime 「很有必要放在第一位」</li>
-		<li class="list1" >计算机</li>
-		<li class="list1" >日本語の勉強</li>
-		<li class="list1" >音乐 & 绘画</li>
+		<para>
+			<h3>我的名字</h3>
+			<mat></mat>
+			<quote>
+				<mat></mat>
+				<span style="color: rgb(var(--t-c1));" ><ruby>純世<rt>すみよ</rt></ruby></span>
+				<br />
+				可以理解为「纯粹的世界」。代表着清新、纯洁的女孩子。
+			</quote>
+			<br class="f-1" />
 
+			<h3>喜欢的东西</h3>
+			<mat></mat>
+			<showcase>
+				<li class="list1" >动漫 「很有必要放在第一位」</li>
+				<li class="list1" >计算机</li>
+			</showcase>
+			<showcase>
+				<li class="list1" >听歌 & 画画</li>
+			</showcase>
+			<br />
+			<br class="f-1" />
+			<br class="f-1 f-2" />
 
-		<h2>玩过的游戏</h2>
-		<li class="list1" >Untitled goose game</li>
-		<li class="list1" >The Final Station</li>
-		<li class="list1" >Undertale</li>
-		<li class="list1" >Minecraft</li>
-		<li class="list1" >Terraria</li>
-		<li class="list1" >Machinarium</li>
-		<br class="f-1" />
-		<br class="f-1" />
+			<h3>看过的动漫</h3>
+			<hr1></hr1>
+			<mat></mat>
+			<span class="imgBox1" >
+				<img src="img/葬送のフリーレン.webp" onload="this.setAttribute('class', 'fade')" />
+				<span class="details" >葬送のフリーレン<br /><i> 2023</i></span>
+			</span>
 
-		<h2>我的网站</h2>
-		<span>这里是我的个人网站，一个简单的博客。主要发布一些有关 <attention>生活</attention> <attention>技术</attention> <attention>游戏「 少量 」</attention> 的文章。如你所见，我的语言表达能力不是很好，这也是我坚持亲手创作博客文章的原因之一。</span>
-		<br />
-		<br class="f-1" />
-		<span>其实在很久以前，我就想拥有一个自己的网站了。由于囊中羞涩，这个愿望一直没能实现。直到 2023 年的某一天，我偶然接触到了 <attention class="hint--bottom hint--rounded" data-hint="比某些平台强太多..." >Cloudflare</attention> 这个良心的平台，才迈出了搭建网站的第一步。为了做好这个网站，我在无数次的复制粘贴中学会了如何运用代码表达心中的想法。历经 4 次重构后，我完成了它！</span>
-		<br />
-		<br class="f-1" />
-		<quote>
-		<span>网站当前使用的主题叫做「<a class="link" href="https://github.com/Dragoft/site" target="_blank">S E K A I</a>」，设计灵感来自 <a class="link" href="https://kotobank.jp/" target="_blank"> kotobank.jp/</a>。和最初的构想一样，它简洁、美观，干净利落。虽然它的性能不是最好的，但它一定是最独一无二的。</span>
-		</quote>
-		<br class="f-1" />
-		<br class="f-1" />
+			<br class="f-1" />
+			<br class="f-1" />
+			<br class="f-1 f-2" />
+		</para>
 
-		<h2>私の友達</h2>
-		<span>不是很喜欢交朋友，暂时不支持交换友链。</span>
+		<para>
+			<h2>我的网站</h2>
+			<h3>概要</h3>
+			<mat></mat>
+			<span>这里是我的个人网站，一个简单的博客。</span>
+			<br />
+			<span>主要发表 <attention>生活</attention> <attention>感想</attention> 方面的文章。</span>
+			<br />
+			<br class="f-1" />
+			<span>我的文笔不好，这是我坚持亲手创作博客文章的原因之一。</span>
+			<br />
+			<br class="f-1" />
+			<br class="f-1" />
+			<h3>回忆</h3>
+			<mat></mat>
+			<span>很久以前，我就想有一个自己的网站了。</span>
+			<br />
+			<span>直到 2023 年的一天，我遇到了 <attention>Cloudflare</attention>。原本遥不可及的梦想顷刻便触手可及。我抓住了这个机会，网站的第一个版本在 2023-2-3 11:23 成功部署。</span>
+			<br />
+			<br class="f-1" />
+			<span>我欣赏与众不同的设计。为此，我踏上了网站设计的漫漫长路。</span>
+			<br />
+			<span>自学前端是个痛苦的过程。通过无数次复制粘贴，我学会了如何使用代码表达心中的想法。历经 4 次重构，我完成了这款网站主题：「<a class="link" href="https://github.com/Dragoft/site" target="_blank">しろい花</a>」，设计灵感源自 <a class="link" href="https://kotobank.jp/" target="_blank"> kotobank.jp/</a>。和最初的构想一样，它简洁、美观，干净利落。虽然它不是最好的，但一定是最独一无二的。</span>
+		</para>
 
+		<para>
+			<h2>私の友達</h2>
+			<span>个人性格就是这样。</span>
+			<br />
+			<span>沉默寡言，保持低调，不是很会交朋友。这里不支持交换友链。</span>
+		</para>
 	</div>
 
 </body>

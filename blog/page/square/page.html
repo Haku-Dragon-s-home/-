@@ -2,186 +2,207 @@
 <html lang="zh">
 
 <head>
-	<title>square</title>
+	<title>-寂静的广场</title>
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<script src="https://s3.pstatp.com/cdn/expire-1-M/jquery/3.3.1/jquery.min.js"></script>
-	<link rel="preload" as="font" href="../../../src/Poppins Regular.woff2" crossorigin="anonymous" />
-	<link rel="stylesheet" type="text/css" href="../../main.css">
-	<link rel="stylesheet" type="text/css" href="../../../css/hint.css">
-	<link rel="stylesheet" type="text/css" href="style.css">
+
+	<link rel="preload" as="font" href="../../src/Poppins Regular.woff2" crossorigin="anonymous" />
+	<link rel="stylesheet" type="text/css" href="../../default.css">
+
 </head>
 
-<body id="body" >
+<body>
 <script>
-	window.parent.postMessage('env.f.page.ok("- ' + document.title + '")', document.domain.length == 0 && '*' || '/');
-	history.pushState(null, null, location.href);
-
+	window.parent.postMessage('env.f.page.ok("' + document.title + '")', document.domain ? '/' : '*')
 	window.addEventListener('message', function(event) {
-		if (event.origin == 'null' || event.origin.includes('https://tatsuno.top')) {
-			eval(event.data);
-		}
-	});
+		if (event.origin == 'null' || event.origin.includes('https://sumiyo.link')) {eval(event.data)}
+	})
 
 </script>
+<style>
 
-<!-- Mian -->
-
-<!-- MESSAGE   V. 1.0.0 -->
-<div class="message" >
-	<div class="message-box" >content</div>
-</div>
-<div class="del" >
-	<div class="del-box" >
-		<h1 style="color: white; user-select: none;" > 删除</h1>
-		<span style="color: rgba(255, 255, 255, 0.8);" >真的要删除这条留言吗？被删除的数据将无法恢复！</span>
-		<br />
-		<span style="color: rgba(255, 255, 255, 0.8);" >[ID: <span style="color: rgba(255, 255, 255, 0.8);" class="del-id" >null</span>]</span>
-		<br />
-		<br class="f-1" />
-		<br class="f-1" />
-		<span class="t-9 delbtn" >确定</span><span class="t-9" onclick="deleteCancel()" style="margin-left: 20px;" >取消</span>
-	</div>
-</div>
-
-
-
-
-<div class="main" >
-	<div class="f-2" >
-		<h1>广场</h1>
-		<i>—— 钟声响起，寒风穿过街道。空空的，广场上一个人都没有 ...</i>
-		<br />
-		<br class="f-1" />
-
-		<span>欢迎来到网站广场。这里是市中心一个不起眼的角落。</span>
-		<br class="f-3" />
-		<br />
-		<span>漫步走过一排排锈迹斑斑的长椅，你四处寻找。夕阳穿过冬天的薄雾，依旧朦朦胧胧地照着，什么也看不清。</span>
-		<br class="f-3" />
-		<br />
-		<span>前方似乎立着什么。</span>
-		<br />
-		<span>你走上前去，是一块陈旧的「留言板」。</span>
-		<br class="f-3" />
-		<br />
-		<span>凑上前仔细观察。木质的表皮从板面上脱落，昔日的字迹仍旧清晰可见。</span>
-		<br />
-		<span>“<i>该写点什么呢？ </i>”</span>
-		<br />
-		<span>你从上衣的口袋中拿出了笔 ......</span>
-		<br />
-		<br class="f-1" />
-		<br class="f-1" />
-		<h2>留言板</h2>
-	</div>
-
-	<div class="f-3" >
-		<br class="f-1" />
-		<h2>留言板</h2>
-	</div>
-
-	<div class="commentBox" ></div>
-	<br class="f-1" />
-
-	<textarea class="textarea Tname" placeholder="昵称" autocomplete="off" maxlength="20"></textarea>
-	<textarea class="textarea Tcontent" placeholder="内容" autocomplete="off" maxlength="200" ></textarea>
-
-	<span class="bottomBox" >
-		<span class="btn1 hint--right hint--rounded" data-hint="使用须知
-————————————
-此留言系统不支持 Html & Markdown 语法。
-超过 5 行的留言将被折叠。
-超过 7 天前的留言将无法被删除
-
-严禁发布任何非法内容，博主不会对留言的内容负责。
-请勿恶意调用本站的留言系统 API。" >关于</span>
-		<span class="btn1" style="margin-left: 5px;" onclick="init()" >刷新</span>
-		<span class="count" >剩余 200 字</span>
-	</span>
-	<a href="javascript:;" onclick="sent()" class="sent">submit</a>
-
-	<div class="pagebtn" >
-		<span class="page" style="user-select: text;" >
-			页数：
-			<textarea class="textarea Tpage" autocomplete="off" maxlength="3" onfocus="this.select();" >1</textarea>
-			/
-			<span class="page0" style="color: rgba(100, 102, 102, 1); font-family: 'Microsoft YaHei';" >0</span>
-		</span>
-		<br />
-		<a href="javascript:;" onclick="turnPage(-1)" class="turn">上一页</a>
-		|
-		<a href="javascript:;" onclick="turnPage(1)" class="turn">下一页</a>
-	</div>
-
-	<br class="f-1" />
-	<br class="f-1" />
-	<br class="f-1" />
-	<br class="f-1" />
-	<br class="f-1" />
-	<br class="f-1" />
-	<br class="f-1" />
-
-</div>
-
-
-
-
-
-<script src="../../../js/jquery.base64.js" ></script>
-<script src="script.js" ></script>
-<script>
-
-	errN = 0;
-	wait = 0;
-	if (document.domain!='') {
-		setTimeout(function (){
-			init();
-		}, 1000);
-	} else {
-		console.warn('[' + dateFormatter('HH:mm:ss', new Date()) + '] The comment data will not be loaded in the local environment.');
+	textarea {
+		display: inline-block;
+		vertical-align: top;
+		padding: 2px 4px;
+		margin-right: 10px;
+		height: 24px;
+		min-height: 24px;
+		width: calc(25% - 50px);
+		resize: none;
+		outline: none;
+		background-color: rgba(var(--t-b1), 0.6);
+		color: rgba(var(--t-t1), 0.8);
+		border: 1px solid rgba(var(--t-t1), 0.4);
+		font-size: 16px;
+		line-height: 24px;
+		font-family: 'Microsoft YaHei';
+		border-radius: 5px;
+	}
+	textarea::placeholder {
+		color: rgba(var(--t-t1), 0.4);
+		font-family: 'Microsoft YaHei';
+		user-select: none;
+	}
+	.tbox {
+		width: calc(70% - 50px);
+		resize: vertical;
+	}
+	.post {
+		margin-bottom: 30px;
+		white-space: nowrap;
+		user-select: none;
 	}
 
+	footer {
+		font-family: 'Microsoft YaHei';
+	}
+	footer right {
+		float: right;
+	}
+	footer a,
+	.post a {
+		height: 24px;
+		width: 60px;
+		padding: 2px 5px;
+		margin-right: 10px;
+		text-align: center;
+		font-size: 16px;
+		line-height: 25px;
+		color: rgba(var(--t-t1), 1);
+		background-color: rgba(var(--t-t1), 0.1);
+		display: inline-block;
+		border: 1px solid rgba(var(--t-t1), 0.4);
+		border-radius: 3px;
+		user-select: none;
+		cursor: pointer;
+	}
+	footer a:active,
+	.post a:active {
+		background-color: rgba(var(--t-t1), 0.1) !important;
+	}
+	footer a:hover,
+	.post a:hover {
+		background-color: rgba(var(--t-t1), 0.2);
+	}
+	footer .disabled,
+	.wait {
+		opacity: 0.6;
+		pointer-events: none;
+	}
 
-	// 跳转页面
-	$('.Tpage').on('keyup', function () {
-		 if(event.which == 13){
-			var Tpage = Number(document.querySelector('.Tpage').value);
-			document.querySelector('.Tpage').value = page;
-			$('.Tpage').focus()
+	.list {
+		font-size: 16px;
+		line-height: 24px;
+	}
 
-			if (typeof Tpage === 'number') {
-				if (Tpage > 0) {
-					if (Tpage <= PageAll) {
-						if (Tpage != page) {
-							page = Tpage;
-							loadComment(page);
-							document.querySelector('.Tpage').value = page;
-							$('.Tpage').focus()
-						}
-					}
-				}
-			}
+	comment {
+		display: block;
+		margin-bottom: 40px;
+	}
+	comment name {
+		display: block;
+		font-weight: bolder;
+		font-size: 18px;
+		color: rgba(var(--t-t1), 0.8);
+	}
+	comment info {
+		display: block;
+		color: rgba(var(--t-c1), 0.6);
+		user-select: all;
+	}
+
+	comment span {
+		display: block;
+		overflow: hidden;
+	}
+	comment .zoltraak {
+		margin-left: 5px;
+		color: rgba(var(--t-c1), 1);
+		text-decoration: underline;
+		cursor: pointer;
+		user-select: none;
+	}
+
+	footer .policy,
+	comment .unfold {
+		color: rgba(var(--t-c1), 1);
+		text-decoration: underline;
+		cursor: pointer;
+		user-select: none;
+	}
+	comment .op:after {
+		content: '';
+		margin-left: 5px;
+		font-size: 14px;
+		color: rgba(var(--t-c2), 0.8);
+		pointer-events: none;
+	}
+
+	hr {
+		margin-left: 0;
+		width: 100%;
+		border: none;
+		border-top: 1px solid rgba(var(--t-t1), 0.3);
+	}
+
+	@media screen and (max-width: 850px)  {
+		footer span {
+			display: none;
 		}
-	})
-
-	// 统计字数
-	$('.Tcontent').on('keyup', function () {
-		if (document.querySelector('.Tcontent').value.length>=180) {
-			$('.count').css('color', 'rgba(255, 50, 50, 0.7)');
-		} else {
-			$('.count').css('color', 'rgba(98, 185, 229, 0.8)');
+		textarea {
+			width: calc(30% - 50px);
 		}
-		var n = 200 - document.querySelector('.Tcontent').value.length;
-		document.querySelector('.count').innerHTML = '剩余 ' + n + ' 字';
+		.tbox {
+			width: calc(60% - 50px);
+		}
+	}
 
-	})
+</style>
 
-</script>
+	<!-- Mian -->
+	<div class="main" >
 
+		<h1>广场</h1>
+		<i>—— 钟声响起，寒风穿过街道。空空的，广场上一个人都没有 …</i>
+		<br />
+		<br class="f-1" />
+		<para>
+			<span>欢迎来到网站广场。这里是市中心一个不起眼的角落。</span>
+			<br />
+			<span>漫步走过一排排锈迹斑斑的长椅，你四处寻找。夕阳穿过冬天的薄雾，朦朦胧胧地照着。依旧什么也看不清。</span>
+			<br class="f-1" />
+			<br />
+			<span>前方似乎立着什么。</span>
+			<br />
+			<span>你走上前去，是一块古老的「留言板」。</span>
+			<br />
+			<span>凑近仔细观察。木质的表皮从板面上脱落，昔日的字迹仍旧清晰可见。</span>
+			<br />
+			<span>“<i>该写点什么呢？ </i>”</span>
+			<br />
+			<span>你从上衣的口袋中拿出了笔 ......</span>
+		</para>
 
+		<div class="post" >
+			<textarea oninput="this.value = this.value.replace(/\n/g, '')" placeholder="名字" autocomplete="off" maxlength="20" ></textarea>
+			<textarea placeholder="留下些什么吧 …" autocomplete="off" maxlength="200" class="tbox" ></textarea>
 
+			<a onclick="env.f.submit()" >SUBMIT</a>
+		</div>
+
+		<div class="list" ><span>加载中 ...</span><br /><br class="f-1" /></div>
+		<hr />
+		<footer>
+			<a onclick="env.f.page(-1)" class="disabled" >上一页</a><a onclick="env.f.page(1)" class="disabled" >下一页</a><a onclick="env.f.init()" >刷新</a>
+			<span>先认真看看我们的「<span class="policy" onclick="window.parent.postMessage(`env.f.linkto('page/policy')`, document.domain ? '/' : '*')" >使用协议</span>」哦</span>
+			<right><span>第 <span id="_1" >0</span> 页 | 共 <span id="_2" >0</span> 条留言</span></right>
+
+		</footer>
+	</div>
+
+	<script src="script.js" ></script>
 
 </body>
 </html>

@@ -2,26 +2,22 @@
 <html lang="zh">
 
 <head>
-	<title>policy</title>
+	<title>-policy</title>
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<script src="https://s3.pstatp.com/cdn/expire-1-M/jquery/3.3.1/jquery.min.js"></script>
+
 	<link rel="preload" as="font" href="../../../src/Poppins Regular.woff2" crossorigin="anonymous" />
-	<link rel="stylesheet" type="text/css" href="../../main.css">
+	<link rel="stylesheet" type="text/css" href="../../default.css">
 
 </head>
 
 <body>
 <script>
-	window.parent.postMessage('env.f.page.ok("- ' + document.title + '")', document.domain.length == 0 && '*' || '/');
-	history.pushState(null, null, location.href);
-
+	window.parent.postMessage('env.f.page.ok("' + document.title + '")', document.domain ? '/' : '*')
 	window.addEventListener('message', function(event) {
-		if (event.origin == 'null' || event.origin.includes('https://tatsuno.top')) {
-			eval(event.data);
-		}
-	});
+		if (event.origin == 'null' || event.origin.includes('https://sumiyo.link')) {eval(event.data)}
+	})
 
 </script>
 
@@ -29,72 +25,68 @@
 	<div class="main" >
 
 		<h1>Policy</h1>
-		<i>—— 网站的隐私政策、版权所有和其它乱七八糟的东西 ...</i>
+		<i>—— 这里专门放一些乱七八糟的东西 …</i>
 		<br />
 		<br class="f-1" />
+		<para>
+			<quote>
+				自己随便写的。如有漏洞，欢迎指出！		
+				<br />
+				<i style="display: block; text-align: right; color: rgba(151, 153, 153, 0.5);" >—— sumiyo</i>
+			</quote>
+		</para>
 
-		<quote>
-			自己随便写的。如有漏洞，欢迎指出！		
+		<para>
+			<h2>版权所有</h2>
+			<li class="list2" >禁止未经许可的转载行为</li>
+			<li class="list2" >您不可以以任何形式使用此网站的主题。但您可以学习、少量借鉴其代码</li>
+
+		</para>
+
+		<para>
+			<h2>免责声明</h2>
+			<h3>内容</h3>
+			<span>网站的内容仅代表个人观点，并不 100% 正确，请自行鉴别。</span>
 			<br />
-			<i style="display: block; text-align: right; color: rgba(151, 153, 153, 0.5);" >—— Tatsuno</i>
-		</quote>
-		<br class="f-1" />
-		<br class="f-1" />
+			<span>博主不会为您使用该网站造成的任何损失负责。</span>
+			<br />
+			<br class="f-1" />
+			<h3>侵权</h3>
+			<span>若网站侵犯了您的权利，请通过主页菜单中提供的「邮箱」联系博主。</span>
+			<br />
+			<span>确认后，博主将会尽快删除侵权的内容。</span>
 
-		<h2>版权所有</h2>
-		<span>这里是 <a class="link" href="https://tatsuno.top/" target="_blank">tatsuno.top/</a>， <attention>Tatsuno</attention> 的个人网站。</span>
-		<br />
-		<span>作为访客，请您遵守以下条例。</span>
-		<br />
-		<br class="f-1" />
-		<li class="list1" >严禁转载博客文章至百度贴吧、CSDN、知乎等平台</li>
-		<li class="list1" >您不可以使用、转载、魔改、售卖此网站的主题。但您可以学习、少量借鉴其代码</li>
-		<li class="list1" >请勿快速请求网站的 API ，任何速率过快的请求都将受到屏蔽</li>
+		</para>
 
-		<br class="f-1" />
-		<br class="f-1" />
+		<para>
+			<h2>隐私政策</h2>
 
-		<h2>免责声明</h2>
-		<h3>内容</h3>
-		<span>网站的内容仅代表个人观点，并不 100% 正确，请自行鉴别。博主不会因为您使用该网站造成的任何损失负责。</span>
-		<br />
-		<br class="f-1" />
-		<h3>侵权</h3>
-		<span>若网站侵犯了您的权利，请通过主页菜单中提供的「邮箱」联系博主。</span>
-		<br />
-		<span>确认后，博主将会尽快删除侵权的内容。（很少看邮件，中间可能会耽搁几天时间）</span>
+			<h3>曲奇</h3>
+			<span>网站共使用了 1 个 Cookie，有效期为 7 天「有效期内的每次访问都将会自动续期」</span>
+			<br />
+			<span>此 Cookie 仅用于标记新访客，实现访客数统计。</span>
+			<br />
+			<br class="f-1" />
 
-		<br />
-		<br class="f-1" />
-		<br class="f-1" />
+		</para>
 
-		<h2>隐私政策</h2>
+		<para>
+			<h2>留言板</h2>
 
-		<h3>Cloudflare Web Analytics</h3>
-		<span>是的，此网站启用了网站分析，用于保证网站的安全。详情请看：<a class="link" href="https://www.cloudflare.com/web-analytics/" target="_blank">cloudflare.com/</a></span>
-		<br />
-		<br class="f-3" />
-		<span>您的以下信息将会在 Cloudflare 保存一段时间：</span>
-		<br />
-		<br class="f-1" />
-		<li class="list1" >地理位置（精确到国家）</li>
-		<li class="list1" >设备类型</li>
-		<li class="list1" >浏览器类型</li>
-		<li class="list1" >操作系统</li>
-		<br class="f-1" />
+			<h3>概要</h3>
+			<span>广场留言板的数据全部储存在 Cloudflare D1 数据库中。发表留言时，网站会储存您的发言的昵称、内容、留言时间。您的其他隐私信息不会被储存。</span>
+			<br />
+			<br class="f-1" />
 
-		<h3>Cookie</h3>
-		<span>网站共使用了 1 个 Cookie，有效期为 7 天。（有效期内的每次访问都将会自动续期）</span>
-		<br />
-		<span>此 Cookie 仅用于标记新访客，从而实现访客数统计。</span>
-		<br />
-		<br class="f-1" />
-
-		<h3>网站留言板</h3>
-		<span>发表留言时，我们会记录您的发言名称、内容、时间。</span>
-		<br />
-		<br class="f-1" />
-
+			<h3>须知</h3>
+			<li class="list2" >嗯…请不…… 请不要滥用我们的 API 「可怜」</li>
+			<li class="list2" >请不要发表任何涉及政治方面的言论 …</li>
+			<br class="f-1" />
+			<li class="list2" >昵称、留言的最大字数分别为 20 字、 200 字</li>
+			<li class="list2" >7 天前的留言无法再被删除</li>
+			<li class="list2" >超过 5 行的留言内容会被自动折叠</li>
+			<li class="list2" >留言板不支持任何 Markdown & Html 语法</li>
+		</para>
 	</div>
 
 </body>

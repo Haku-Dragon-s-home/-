@@ -2,111 +2,170 @@
 
 
 /*	script.js
- *	created by Tatsuno Yuu, 2024/8/27
+ *	created by sumiyo, 2024/8/27
 
 	*/
 
 
 
+env.data.version.main = '1.0.24'
+
 // 通知列表
-env.data.list.notice = [
+env.data.list.info = [
+	{
+		date: '1.01',
+		name: '主题优化',
+		des: '不优雅的东西，删掉！\n2025 新年快乐',
+	},
+	{
+		date: '11.21',
+		name: '注册 <ins>sumiyo.link/</ins>',
+		des: '新的域名，新的开始！',
+	},
+	{
+		date: '10.02',
+		name: '网站界面优化',
+		des: '一点点小调整',
+	},
 	{
 		date: '8.31',
-		event: '第 4 次重构',
-		content: '重写了主页 & 播放器的函数结构\n优化了网站的部分 api',
+		name: '第 4 次重构',
+		des: '重写了函数结构',
 	},
 	{
-		date: '8.12',
-		event: '调整主页样式',
-		content: '调整了主页的样式\n更换了头像',
-	},
-	{
-		date: '6.8',
-		event: '留言板正式上线',
-		content: '网站新增留言板功能！',
-	},
-	{
-		date: '4.27',
-		event: '细节优化',
-		content: '对主页、博客样式进行了调整\n修复手机端界面最小宽度小于 380px 的问题',
-	},
-	{
-		date: '4.6',
-		event: '启用域名: tatsuno.top/',
-		content: '新的域名，新的开始！',
+		date: '6.08',
+		name: '留言板上线',
+		des: '终于可以留言啦',
 	},
 
-];
+]
 
 
 
-// 添加方法
-env.f = {}
-env.timer.t1 = null
+// 添加函数
 env.timer.t2 = null
 
 /* --------------------------------------
-已占用的 tmp 变量
-env.tmp.t1
-env.tmp.t2
+	
+	env.tmp.t1
+	env.tmp.t2
+	env.tmp.t3
+	env.tmp.t4
+	env.tmp.t5
+
+	env.timer.t1
+	env.timer.t2
+	env.timer.t3
+	env.timer.t4
+
+	_1
+	_2
+	_3
 
 */
 
-// 剔除博客中被隐藏的文章
-env.f.filter = function(arr, key, value) {
-	return arr.filter(obj => obj[key] != value);
+
+
+env.f.fade = function(e, t, style = '') {
+	// 淡入淡出动画
+	var s = null
+	var t0 = Math.abs(t)
+	e.setAttribute('style', 'transition: 0s; opacity: ' + ((t > 0) ? 1 : 0))
+
+	function animation(t1) {
+		if (!s) {s = t1}
+		var p = t1 - s
+		if (t > 0) {
+			e.style.opacity = Math.min(p / t0, 1).toFixed(2)
+			if (p < t0) {
+				requestAnimationFrame(animation)
+			} else {
+				e.setAttribute('style', style)
+			}
+		} else {
+			e.style.opacity = Math.max(1 - p / t0, 0)
+			if (p < t0) {
+				requestAnimationFrame(animation)
+			} else {
+				e.setAttribute('style', style || 'display: none')
+			}
+		}
+	}
+
+	requestAnimationFrame(animation)
 }
 
-// 剔除博客中被隐藏的文章
-env.f.filter = function(arr, key, value) {
-	return arr.filter(obj => obj[key] != value);
+env.f.scroll = function(e, y, t = 300, abs = true) {
+	// 滚动动画
+	var start = e.scrollTop
+	var end = abs ? y : (start + y)
+	var d = end - start
+	var s = null
+
+	function ease(p) {
+		return p < 0.5 
+		? 2 * p * p 
+		: -1 + (4 - 2 * p) * p
+	}
+	function animation(t1) {
+		if (s === null) s = t1
+		const timeElapsed = t1 - s
+		const p = Math.min(timeElapsed / t, 1)
+
+		// 使用缓动函数来实现平滑效果
+		const easing = ease(p)
+		e.scrollTop = start + d * easing
+
+		if (timeElapsed < t) {
+			requestAnimationFrame(animation)
+		}
+	}
+
+	requestAnimationFrame(animation)
 }
 
-// 设置 Cookie
+env.f.filter = function(arr, key, value) {
+	// 剔除被隐藏的文章
+	return arr.filter(obj => obj[key] != value)
+}
+
 env.f.setCookie = function(value) {
-	var now = new Date();
-	var oneWeekLater = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000); 
-	var expires = oneWeekLater.toUTCString();
-	document.cookie = "Cookie=" + value + "; expires=" + expires;
-	return expires;
+	// 设置 Cookie
+	document.cookie = "Cookie=" + value + "; expires=" + new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000).toUTCString()
 }
 
-// 读取 Cookie
 env.f.getCookie = function(name) {
-	var pattern = new RegExp('(?:^|; )' + name + '=([^;]*)');
-	var matches = document.cookie.match(pattern);
-	if (matches) {
-		return decodeURIComponent(matches[1]);
-	}
-	return undefined;
+	// 读取 Cookie
+	var r = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'))
+	if (r) {return decodeURIComponent(r[1])}
+	return undefined
 }
 
-// 生成[min, max]范围内的随机整数
 env.f.getRandom = function(min, max) {
-	return Math.floor(Math.random() * (max - min + 1)) + min;
+	// 生成随机整数
+	return Math.floor(Math.random() * (max - min + 1)) + min
 }
 
-// 获取浏览器类型
 env.f.getBrowser = function() {
-	var userAgent = window.navigator.userAgent;
-
-	if (userAgent.indexOf("Chrome") !== -1) {
-		return "Chrome";
-	} else if (userAgent.indexOf("Firefox") !== -1) {
-		return "Firefox";
-	} else if (userAgent.indexOf("Safari") !== -1) {
-		return "Safari";
-	} else if (userAgent.indexOf("Edge") !== -1) {
-		return "Edge";
-	} else if (userAgent.indexOf("MSIE") !== -1 || userAgent.indexOf("Trident/") !== -1) {
-		return "IE";
+	// 获取浏览器类型
+	var r = window.navigator.userAgent;
+	if (r.indexOf("Chrome") != -1) {
+		return "Chrome"
+	} else if (r.indexOf("Firefox") != -1) {
+		return "Firefox"
+	} else if (r.indexOf("Safari") != -1) {
+		return "Safari"
+	} else if (r.indexOf("Edge") != -1) {
+		return "Edge"
+	} else if (r.indexOf("MSIE") != -1 || r.indexOf("Trident/") != -1) {
+		return "IE"
 	} else {
-		return "Unknown";
+		return "Unknown"
 	}
 }
 
-// 日期格式化
 env.f.dateFormatter = function(formatter, date) {
+	// 日期格式化
 	date = (date ? new Date(date) : new Date)
 	const Y = date.getFullYear() + '',
 		M = date.getMonth() + 1,
@@ -123,316 +182,341 @@ env.f.dateFormatter = function(formatter, date) {
 		.replace(/ss/g, (s < 10 ? '0' : '') + s)
 }
 
-// 大小格式化
 env.f.sizeFormatter = function(bytes) {
-	var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-	if (bytes === 0) return '0 Bytes';
-	var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)), 10);
-	return (bytes / Math.pow(1024, i)).toFixed(2) + ' ' + sizes[i];
+	// 文件大小转换
+	var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
+	if (bytes === 0) return '0 Bytes'
+	var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)), 10)
+	return (bytes / Math.pow(1024, i)).toFixed(2) + ' ' + sizes[i]
 }
 
-// 计算网站上线时间
 env.f.getDate = function() {
-	var seconds = 1000
-	var minutes = seconds * 60
-	var hours = minutes * 60
-	var days = hours * 24
-	var years = days * 365
-	var today = new Date()
-	var todaySecond = today.getSeconds()
-	var t1 = Date.UTC(2023,1,3,11,23,35)
-	var t2 = Date.UTC(today.getFullYear(), today.getMonth(), today.getDate(), today.getHours(), today.getMinutes(), today.getSeconds())
-	var diff = t2-t1
-	var diffYears = Math.floor(diff/years)
-	var diffDays = Math.floor((diff/days)-diffYears*365)
+	// 计算网站上线时间
+	var now = new Date()
+	var diff = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes(), 0) - Date.UTC(2023,1,3,11,23,35)
+	var diffYears = Math.floor(diff / 31536000000)
+	var diffDays = Math.floor((diff / 86400000) - diffYears * 365)
 
-	document.getElementById('onlineDate').innerHTML = diffYears*365+diffDays
-	return diffYears*365+diffDays
+	document.getElementById('_3').innerHTML = diffYears * 365 + diffDays
+	return diffYears * 365 + diffDays
 }
 
-// iframe 通讯器
 env.f.post = function(event) {
-	document.getElementById('iframe').contentWindow.postMessage(event, document.domain.length == 0 && '*' || '/');
+	// 页面通信
+	document.querySelector('iframe').contentWindow.postMessage(event, env.data.isNetwork ? '/' : '*')
 }
 
-// 清除 url 参数
-env.f.clearURL = function() {
-	var url = window.location.href
-	if (url.indexOf('?') !== -1) {
-		var url = url.replace(/(\?|#)[^'"]*/, '')
-		history.replaceState(null, null, url);
+env.f.linkto = function(id) {
+	// 博客文章重定向
+	document.querySelector('.blog iframe').remove()
+	document.querySelector('.blog').appendChild(document.createElement('iframe'))
+
+	env.f.page.load()
+	if (player.data.ask) {player.f.add.ask(0)}
+
+	setTimeout(function (){
+		env.f.url.set('id', id)
+		document.querySelector('iframe').src = env.data.isNetwork ? (window.location.origin + '/blog/' + id + '/page') : ('blog/' + id + '/page.html')
+	}, 500)
+}
+
+env.f.url = {}
+	env.f.url.clear = function() {
+		// 清除参数
+		let url = window.location.href
+		if (url.indexOf('?') != -1) {
+			history.replaceState(null, null, url.replace(/(\?|#)[^'"]*/, ''))
+		}
 	}
-}
 
-// 清除 url 参数
+	env.f.url.set = function(name, value) {
+		// 修改参数
+		let url = location.href
+		let url2
+
+		if (typeof value === 'string') {value = value.toString().replace(/(^\s*)|(\s*$)/, "")}
+		if (!value) {
+			let reg = eval('/(([\?|&])' + name + '=[^&]*)(&)?/i')
+			let res = url.match(reg)
+			if (res) {
+				if (res[2] && res[2] === '?') { // before has ?
+					if (res[3]) {url2 = url.replace(reg, '?')} else {url2 = url.replace(reg, '')}
+				} else {
+					url2 = url.replace(reg, '$3')
+				}
+			}
+		} else {
+			let reg = eval('/([\?|&]' + name + '=)[^&]*/i')
+			if (url.match(reg)) {
+				url2 = url.replace(reg, '$1' + value)
+			} else {
+				let reg = /([?](\w+=?)?)[^&]*/i
+				let res = url.match(reg)
+				url2 = url
+				if (res) {
+					if (res[0] !== '?') {
+						url2 += '&'
+					}
+				} else {
+					url2 += '?'
+				}
+				url2 += name + '=' + value
+			}
+		}
+		history.replaceState(null, null, url2)
+	}
+
+	env.f.url.get = function(name) {
+		// 读取参数
+		var d = window.location.search.substr(1).match(new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i"))
+		var r = ''
+		if (d != null) {
+			r = decodeURIComponent(d[2])
+			return r == null || r == '' || r == undefined ? undefined : r
+		}
+	}
+
+	env.f.url.read = function() {
+		// 读取参数并打开
+		var id = env.f.url.get('id')
+		if (id) {
+			var l = env.data.list.blog
+			var n = l.length
+
+			for (var i = 0; i < n; i++) {
+				if (l[i].src == id + '/') {
+					env.f.blog.open(id)
+					break
+				} else {
+					if (i == n - 1) {env.f.blog.open('page/oops')}
+				}
+			}
+		} else {
+			env.f.url.clear()
+			document.title = env.data.domain
+			env.tmp.t4 = 1
+		}
+	}
+
+// 博客框架
 env.f.blog = {}
 	env.f.blog.open = function(id) {
-		// 打开博客界面
-		env.f.page.loading()
+		// 打开博客
+		document.querySelector('.blog').appendChild(document.createElement('iframe'))
 
-		$('.iframe').css('display', 'none')
-		$('.blog').fadeIn(300)
-		$('.blog').addClass('blog-active')
-
-		// 修改地址栏参数
-		if (document.domain!='') {
-			history.replaceState(null, null, window.location.href.split('top',1)[0] + 'top/blog?id=' + id)
-		} else {
-			changeURLStatic('id', id)
-		}
+		env.f.page.load()
+		env.f.fade(document.querySelector('.blog'), 500)
 
 		setTimeout(function (){
-			// 跳转指定文章
-			env.data.change = 1
-			if (env.data.states == "Local") {
-				document.getElementById('iframe').src = 'blog/' + id + '/page.html'
-			} else {
-				document.getElementById('iframe').src = window.location.href.split('top',1)[0] + 'top/blog/' + id + '/page'
-			}
-
-			$('.menu-btn-3').css('transition', '0.3s')
-		},400)
-
-		// 返回按钮
-		$('.menu-btn-3').fadeIn(400)
+			if (id != 'page/oops') {env.data.isNetwork ? (history.replaceState(null, null, window.location.origin + '/blog?id=' + id)) : ( env.f.url.set('id', id))}
+			document.querySelector('iframe').src = env.data.isNetwork ? (window.location.origin + '/blog/' + id + '/page') : ('blog/' + id + '/page.html')
+		}, 500)
 	}
 
 	env.f.blog.close = function() {
-		// 关闭博客页面
-		env.f.page.loading.stop()
+		// 关闭博客
+		env.f.fade(document.querySelector('.blog'), -300)
+		document.title = env.data.domain
+		env.data.isNetwork ? (history.replaceState(null, null, window.location.origin)) : (env.f.url.clear())
 
-		$('.blog').fadeOut(600);
-		$('.iframe').fadeOut(600);
-		$('.menu-btn-3').css('transition', 'none');
-		$('.menu-btn-3').fadeOut(400);
-		$('.blog').removeClass('blog-active');
-
-		if (document.domain!='') {
-			history.replaceState(null, null, window.location.href.split('top',1)[0] + 'top/');
-		} else {
-			ClearURLParam();
-		}
-		if(player.data.subwin == 1) {
-			player.f.add.ask(0);
-		}
-
-		$('title').text('tatsuno.top/');
+		setTimeout(function (){
+			if (player.data.ask) {player.f.add.ask(0)}
+			document.querySelector('.blog iframe').remove()
+		}, 600)
 	}
 
-// 初始化博客、通知面板
+
 env.f.init = function() {
-	// 博客
-	env.data.list.Bloglist = env.f.filter(env.data.list.Bloglist, 'type', 'hide');
-	var BlogTEMP = env.data.list.Bloglist
+	// 初始化菜单
 
-	var ul = document.querySelector('ul');
-	for (var i = 0; i < BlogTEMP.length; i++) {
-		if (BlogTEMP[i]['type'] != 'hide') {
-			var div = document.createElement('div');
-				div.setAttribute('class', 'search-list');
-				div.setAttribute('style', 'display: block');
-				div.setAttribute('id', BlogTEMP[i]['type'] + ' ' + BlogTEMP[i]['name']);
-				ul.appendChild(div);
+	// 文章
+	env.data.list.blog = env.f.filter(env.data.list.blog, 'type', 'hide')
+	var d = env.data.list.blog
+	var e = document.querySelector('.search list')
+	document.getElementById('_1').innerHTML = d.length
 
-			var a = document.createElement('a');
-				a.setAttribute('onclick', `env.f.blog.open('` + BlogTEMP[i]['src'].slice(0, -1) + `')`);
-				a.setAttribute('title', BlogTEMP[i]['details']);
-				div.appendChild(a);
+	for (var i = 0; i < d.length; i++) {
+		if (d[i].type != 'hide') {
+			var div = document.createElement('div')
+				div.setAttribute('style', 'display: block')
+				e.appendChild(div)
 
-			if (BlogTEMP[i]['name'].slice(-1) == '') {
-				a.innerHTML = BlogTEMP[i]['type'] + ' ' + BlogTEMP[i]['name'].substring(0, BlogTEMP[i]['name'].length - 1);
-				var div1 = document.createElement('div');
-					div1.setAttribute('class', 'pin');
-					div1.setAttribute('title', 'Pinned');
-					div1.innerHTML = '';
-					div.appendChild(div1);
-			} else {
-				a.innerHTML = BlogTEMP[i]['type'] + ' ' + BlogTEMP[i]['name'];
-			}
+			var a = document.createElement('a')
+				a.setAttribute('onclick', `env.f.blog.open('` + d[i].src.slice(0, -1) + `')`)
+				a.setAttribute('title', d[i].des)
+				a.innerHTML = d[i].name
+				div.appendChild(a)
+
+			if (d[i].type == 'pinned') {div.setAttribute('class', 'pinned')}
 		}
 	}
 
-	// 显示博客文章数量
-	document.querySelector('.blog-num').innerHTML = BlogTEMP.length;
-	// 初始化搜索引擎
-	document.onkeydown = function(e) {
-		var ev = (typeof event!= 'undefined') ? window.event : e;
-			 if(ev.keyCode == 13) {
-				return false;
-			}
-	}
-	$('#searchInput').on('keyup', function () {
-		new Search('.search-list', $('#searchInput'), 'rgba(244, 183, 188, 1)')
+	// 搜索引擎
+	document.querySelector('.search').setAttribute('style', 'height: ' + (Math.min(5, d.length) * 22 +55) + 'px')
+	document.querySelector('.search textarea').addEventListener('keyup', function(e) {
+		env.f.search()
 	})
-	// 初始化列表高度
-	if (BlogTEMP.length > 10) {
-		$('#search').css('height', '275px');
-		document.getElementById('searchInput').name = 10;
-	} else {
-		$('#search').css('height', BlogTEMP.length * 22 +55 + 'px');
-		document.getElementById('searchInput').name = BlogTEMP.length;
-	}
-
-
 
 	// 通知
-	var NoticeList = document.querySelectorAll(".news-box")
-	var notice = env.data.list.notice
+	var e = document.querySelector('.menu-c2')
+	var l = env.data.list.info
 	for (var i = 0; i < 5; i++) {
-		NoticeList[i].innerHTML = '<span class="news-date" >' + notice[i]['date'] + '</span><span title="' + notice[i]['content'] + '" >' + notice[i]['event'] + '</span>'
+		var div = document.createElement('news')
+			div.innerHTML = '<time>' + l[i].date + '</time><span title="' + l[i].des + '" >' + l[i].name + '</span>'
+			e.appendChild(div)
 	}
 
+	setTimeout(function (){document.querySelector('btn1').removeAttribute('style'); env.f.menu.open()}, 1000)
 }
 
-// 循环检测
-env.f.check = {}
-	env.f.check.run = function() {
-		var memory = env.data.memory.obj
-		env.timer.t1 = setInterval(() => {
-			env.data.memory.check = env.f.sizeFormatter(memory.usedJSHeapSize) + ' / ' + env.f.sizeFormatter(memory.totalJSHeapSize) + ' ' + ((memory.usedJSHeapSize / memory.totalJSHeapSize) * 100).toFixed(1) + '%'
-		}, 2000)
+env.f.msg = function(content, time) {
+	// 弹窗
+	document.querySelector('.message div').innerHTML = content
+	document.querySelector('.message').classList.add('message-active')
 
-	}
-	env.f.check.stop = function() {
-		clearInterval(env.timer.t1 )
-		env.data.memory.check = null
-	}
-
-// 变量快照
-env.f.snapshot = function() {
-	var result = []
-	for (let key in window) {
-		if (typeof window[key] !== 'function') {
-			result.push({name: key, value: window[key], type: typeof window[key]})
-		}
-	}
-	setTimeout(console.groupCollapsed.bind(
-		console, 
-		'snapshot ' + env.f.dateFormatter('hh:mm:ss', new Date())
-	));
-	setTimeout(console.table.bind(
-		console, 
-		result
-	));
-	setTimeout(console.groupEnd.bind());
-}
-
-// 弹窗
-env.f.msg = function(content, type, time) {
-	$('.message-box').html(content);
-	$('.message-box').removeClass('message-info');
-	$('.message-box').removeClass('message-warn');
-	$('.message-box').removeClass('message-error');
-
-	$('.message-box').addClass('message-' + type);
-	$('.message').addClass('message-active');
-	if (time != -1) {
-		setTimeout(function (){
-			$('.message').removeClass('message-active');
-		}, time);
+	if (time > 0) {
+		setTimeout(function (){document.querySelector('.message').classList.remove('message-active')}, time)
 	}
 }
-	// 关闭消息框
 	env.f.msg.close = function() {
-		$('.message').removeClass('message-active');
+		// 关闭弹窗
+		document.querySelector('.message').classList.remove('message-active')
 	}
 
-// 菜单
 env.f.menu = {}
 	env.f.menu.open = function() {
-		if ($('ul').hasClass('wait') == true) {
-			return
-		}
-		if ($('ul')
-.hasClass('ok') != true) {
-			$('ul')
-.addClass('ok')
-			$('ul')
-.addClass('wait')
+		// 打开菜单
+		if (!document.querySelector('.menu-c2 news')) {
+			document.querySelector('btn1').setAttribute('style', 'pointer-events: none')
 			env.f.init()
-				setTimeout(function (){
-				$('ul')
-.removeClass('wait');
-				$('.menu').addClass('menu-active');
-				$('.menu-btn-2').fadeIn(300);
-			}, 1000);
 		} else {
-			$('.menu').addClass('menu-active');
-			$('.menu-btn-2').fadeIn(300);
+			document.querySelector('.menu').classList.add('menu-active')
+			env.f.fade(document.querySelector('btn2'), 300)
 		}
 	}
 
-		env.f.menu.close = function() {
- 			$('.menu').removeClass('menu-active');
-			$('.menu-btn-2').fadeOut(300);
-		}
+	env.f.menu.close = function() {
+		document.querySelector('.menu').classList.remove('menu-active')
+		env.f.fade(document.querySelector('btn2'), -300)
+	}
 
 	env.f.menu.c1 = function() {
-		$('#search').css('transition', 'all 0.3s ease-out 0s');
-		if($('#menu-check-1').hasClass('menu-check-active')!=true) {
-			$('#menu-check-1').addClass('menu-check-active');
-			$('#search').css('opacity', '1');
-			$('#search').css('height', document.getElementById('searchInput').name * 22 +55 + 'px');
+		if (document.getElementById('menu-c1').classList.contains('btn-active')) {
+			document.getElementById('menu-c1').classList.remove('btn-active')
+			document.querySelector('.search').setAttribute('style', 'opacity: 0; height: 0;')
 		} else {
-			$('#menu-check-1').removeClass('menu-check-active');
-			$('#search').css('height', '0px');
-			$('#search').css('opacity', '0');
+			document.getElementById('menu-c1').classList.add('btn-active')
+			document.querySelector('.search').setAttribute('style', 'opacity: 1; height: ' + (Math.min(5, (Number(document.getElementById('_1').innerHTML) || 1)) * 22 +55) + 'px;')
 		}
 	}
 
 	env.f.menu.c2 = function() {
-		if($('#menu-check-2').hasClass('menu-check-active')!=true) {
-			$('#menu-check-2').addClass('menu-check-active');
-			$('.MenuCheck2-inner').css('height', '120px');
-			$('.MenuCheck2-inner').css('opacity', '1');
+		if (document.getElementById('menu-c2').classList.contains('btn-active')) {
+			document.getElementById('menu-c2').classList.remove('btn-active')
+			document.querySelector('.menu-c2').setAttribute('style', 'opacity: 0; height: 0;')
 		} else {
-			$('#menu-check-2').removeClass('menu-check-active');
-			$('.MenuCheck2-inner').css('height', '0px');
-			$('.MenuCheck2-inner').css('opacity', '0');
+			document.getElementById('menu-c2').classList.add('btn-active')
+			document.querySelector('.menu-c2').removeAttribute('style')
 		}
 	}
 
 	env.f.menu.c3 = function() {
-		if($('#menu-check-3').hasClass('menu-check-active')!=true) {
-			$('#menu-check-3').addClass('menu-check-active');
-			$('.MenuCheck3-inner').fadeIn(240);
+		if (document.getElementById('menu-c3').classList.contains('btn-active')) {
+			document.getElementById('menu-c3').classList.remove('btn-active')
+			document.querySelector('.menu-c3').setAttribute('style', 'opacity: 0; height: 0;')
 		} else {
-			$('#menu-check-3').removeClass('menu-check-active');
-			$('.MenuCheck3-inner').fadeOut(240);
+			document.getElementById('menu-c3').classList.add('btn-active')
+			document.querySelector('.menu-c3').removeAttribute('style')
 		}
 	}
 
 env.f.page = {}
-	// 博客页面加载动画
-	env.f.page.loading = function() {
+	env.f.page.load = function() {
+		// 博客加载动画
 		clearInterval(env.timer.t2)
-		$('.pageloading').fadeIn(150)
-		$('.pageloading1').css('display', 'none')
+		env.f.fade(document.querySelector('.loading'), 300)
 
+		env.tmp.t5 = new Date()
+		var l = true
 		env.timer.t2 = setInterval(() => {
-			$('.pageloading1').fadeIn(150)
-			clearInterval(env.timer.t2)
-		},20000)
+			var t = new Date() - env.tmp.t5
+			document.querySelector('.loading span').innerHTML = (t / 1000).toFixed(2)
+		}, 100)
 	}
-		env.f.page.loading.stop = function() {
+		env.f.page.load.stop = function() {
+			// 停止加载动画
 			clearInterval(env.timer.t2)
-			$('.pageloading1').css('display', 'none')
-			$('.pageloading').fadeOut(300)
+			env.tmp.t5 = null
+			delete env.tmp.t5
+			env.f.fade(document.querySelector('.loading'), -500)
+
+			setTimeout(function (){
+				document.querySelector('.loading span').innerHTML = ''
+			}, 500)
 		}
 
-	// 博客页面加载完成后调用
 	env.f.page.ok = function(title) {
-		if (title.slice(0, 1) == '-') {
-			$('title').text('tatsuno.top/ ' + title)
-		} else {
-			$('title').text(title)
-		}
-
-		setTimeout(function (){
-			env.f.page.loading.stop()
-			$('.iframe').fadeIn(400)
-		},1000)
+		// 博客加载完成
+		document.title = (title.slice(0, 1) == '-') ? (title.slice(1) + ' - ' + env.data.domain) : (title)
+		setTimeout(function (){env.f.page.load.stop()}, 2000)
 	}
+
+env.f.type = function() {
+	// 打字机动画
+	var s = '私のサイト、###私##一##人#の##世界です。'
+	var i = 0
+	var e = document.querySelector('type')
+	env.timer.t3 = setInterval(() => {
+		i ++
+		s.substring(i - 1, i) == '#' ? null : (e.innerHTML += s.substring(i - 1, i))
+		if (i == s.length) {clearInterval(env.timer.t3)}
+	}, 140)
+}
+
+env.data.version.search = '1.0.10'
+env.f.search = function() {
+
+	/*	站内搜索引擎
+	*	created by sumiyo, 2025/1/02	with the help of ChatGPT
+
+		*/
+
+	var d = env.data.list.blog
+	var ban = []
+	var k = document.querySelector('.search textarea').value
+	var f = document.querySelector('.search')
+	var o = [...document.querySelectorAll('.search list div')].slice(1)
+
+	//  排除违禁词
+	if (ban.some(item => k.includes(item))) {return}
+
+	for (var i = 0; i < o.length; i++) {
+		o[i].setAttribute('style', 'display: none')
+	}
+
+	// 创建新数组，格式为 {'name': 符合条件的 name 值, 'index': 项数}
+	const r = d
+		.map((item, index) => ({ name: item.name, index }))
+		.filter(item => item.name.slice(2).toLowerCase().includes(k.toLowerCase()))
+
+	//  渲染结果
+	if (k != '') {
+		for (var i = 0; i < r.length; i++) {
+			o[r[i].index].children[0].innerHTML = r[i].name.replace(new RegExp(k, 'gi'), (match) => `<key>${match}</key>`)
+			o[r[i].index].setAttribute('style', 'display: block')
+		}
+	} else {
+		for (var i = 0; i < r.length; i++) {
+			o[r[i].index].children[0].innerHTML = r[i].name
+			o[r[i].index].setAttribute('style', 'display: block')
+		}
+	}
+
+	document.getElementById('_1').innerHTML = r.length
+	f.setAttribute('style', 'transition: none; height: ' + (Math.max(Math.min(5, r.length), 1) * 22 + 55) + 'px')
+	document.querySelector('.search .null').setAttribute('style', 'display: ' + (r.length ? 'none' : 'block'))
+
+}
 
 
 
@@ -440,214 +524,65 @@ env.f.page = {}
 
 
 // 设置环境变量
-env.data.time = env.f.getDate()
-env.data.visitors = 0
+env.data.uptime = env.f.getDate()
 env.data.browser = env.f.getBrowser()
-env.data.lang = navigator.language
-env.data.device = $(window).width() < 900 && 'Mobile' || 'Desktop'
-env.data.states = document.domain == '' && 'Local' || 'Network'
-env.data.memory = {}
-env.data.memory.obj = performance.memory
-env.data.memory.check = null
-env.data.change = 0
 
-env.data.shoten = {
-	'１階': [{'hall': 'flooded by books, nothing left.'}],
-	'２階': [{
-		'bedroom': 'yuu tatsuno',
-		'living room': 'nothing',
-		'toilet': 'nothing',
-		'study': 'Chika Shirakawa',
-		'kitchen': 'nothing',
-	}]
-}
-
-$('title').text('tatsuno.top/')
-history.pushState(null, null, location.href)
-
-env.f.clearURL()
-env.f.check.run()
+env.f.url.read()
 
 
-// 设置全局监听器
 
 // 接受博客页面的信号
 window.addEventListener('message', function(event) {
-	if (event.origin == 'null' || event.origin.includes('https://tatsuno.top')) {
-		eval(event.data);
-	}
+	if (event.origin == 'null' || event.origin.includes('https://' + env.data.domain)) {eval(event.data)}
 })
 
 // 页面加载完成后执行
 window.addEventListener('load',function(){
 	// 计算页面加载时间
-	env.data.load = env.f.dateFormatter ('mm:ss', new Date() - new Date(env.tmp.t1)) + ' ' + (new Date() - new Date(env.tmp.t1)).toString() + 'ms'
+	env.data.load = player.f.conv0(((new Date() - new Date(env.tmp.t1)) / 1000).toFixed(3) * 1000)
 	env.tmp.t1 = null
 	delete env.tmp.t1
 
 	// 获取访问量
-	if (env.data.states == 'Network') {
+	if (env.data.isNetwork) {
 		// 一周内的重复访问不计数
 		if (env.f.getCookie('Cookie') == undefined) {
-			var mode = 1
+			var m = 1
+			env.data.isNew = true
 		} else {
-			var mode = 0
+			var m = 0
+			env.data.isNew = false
 		}
 
-		fetch('https://tatsuno.top/counter.api', {
+		fetch('https://' + env.data.domain + '/counter.api', {
 			method: "POST",
 			headers: {
-				"Token": mode
+				"Token": m
 			}
 		})
 		.then(response => {return response.json()})
 		.then(json => {
-			env.data.visitors = json.results[0].content
-			$('#visit_counter').html(env.data.visitors)
-			$('#visit_counter_outer').fadeIn(300)
-
+			env.data.visitors = Number(json.results[0].content)
 			env.f.setCookie('Cookie !')
+
+			document.getElementById('_2').innerHTML = env.data.visitors
+			document.getElementById('_2').parentNode.removeAttribute('style')
 		})
-	} else {
-		$('#visit_counter').html = env.data.visitors
-		$('#visit_counter_outer').fadeIn(300)
-	}
-
-})
-
-// 检测到后退，前进时，直接关闭博客页面
-$('#iframe').on('load', function() {
-	if (env.data.change != 1) {
-		env.f.blog.close()
-		env.data.change = 0
-	} else {
-		env.data.change = 0
 	}
 })
 
-/* From https://blog.csdn.net/qq_41090476/article/details/96111016 */
-$(body).click(function(e){
-	var e = e || window.event;
-	var elem = e.target;
-	if($(elem).is('.t-21 *')){
-		return;
-	}
-	if($(elem).is('.Avatar') || $(elem).is('.Avatar *')){
-		if(!$('.Avatar').hasClass('Avatar-active')){
-			$('.Avatar').addClass('Avatar-active');
-		} else {
-			$('.Avatar').removeClass('Avatar-active');
-		}
-	}else{
-		$('.Avatar').removeClass('Avatar-active');
-	}	
-})
 
 
 
-// 强制初始化页面
-setTimeout(function (){
-	if(document.querySelector('.Avatar').style.opacity!=1){
-		env.f.msg('初始化异常，已强制加载页面', 'warn', 3000);
-		init();
-	}
-}, 30000);
 
 
-
-function Typewriter() {
-	if (env.data.device == 'Desktop') {
-		var sentence = [
-			// 电脑标题语列表
-
-			'あの、^1000今日は^200' + ['日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日'][new Date().getDay()] + '^300ですか。',
-			'こんにちは、^300これは TATSUNO のブログです！',
-			'すみません、^300わたくしは初心者です。',
-			'白川さんは映画が好きです。^400よく映画を見ます。',
-			'白川さんは^200金曜日から^200日曜日まで^200休みます。',
-			'おいしい！',
-			'佐々木さんはもう食べました。',
-			'白川さんは歌が好きですよ。',
-			'あ！^400これ、^200これは白川さんの猫です！',
-			'田中さんは時々図書館で勉強します。',
-			'田中さんはいませんね。^400奈良へ行きました。',
-			'あれは田中さんの花屋ですか。',
-			'花屋に^300誰もいません。',
-			'でも、^300昨日は寒くありませんでした。^400今日も。',
-			'はい、^300これも私の毎日の仕事です。',
-			'奈良より、^300ここの夏のほうが暑いです。',
-			'わたしのアパートは^300書店の隣に^300あります。',
-			'日本語が下手です。^400でも、^200日本語が好きです。',
-
-		];
-	} else {
-		var sentence = [
-			// 手机标题语列表
-
-			['日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日'][new Date().getDay()],
-			'これは何ですか。',
-			'ここは…',
-			'一个很懒的博主.',
-			'Html！',
-			'Hello world.',
-			'はーい',
-			'小白一只.',
-			'私は新米です。',
-			'Java^1000Script！',
-			'Python！',
-			'こんにちは。',
-			'今日は^500' + ['日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日'][new Date().getDay()] + '^300ですか。',
-			'看上去很不错的样子...',
-			'美味しかったです！',
-			'   ',
-			'昨日は寒かったです。',
-			'Have a good day !'
-
-		];
-	}
-	var RandomSentence = sentence[Math.floor(Math.random() * sentence.length)];
-	$('.Typewriter-1').typed({
-		strings: [RandomSentence],
-		typeSpeed: 100,
-		showCursor: false,
-	});
-}
-
-
-
-/* Console.log */
-console.log( 
-	'\n%c Theme %c S E K A I %c		ver.1.0.18\n',
-	'background-color: rgba(57, 145, 216, 0.5); color: white; font-weight: bolder;',
-	'background-color: rgba(57, 145, 216, 0.3); color: white;',
-	'color: rgba(192, 194, 194, 1);',
-);
-
-setTimeout(console.groupCollapsed.bind(
-	console, 
-	'%cDetails%c()',
-	'color: rgba(100, 102, 102, 0.8)',
-	'color: rgba(100, 102, 102, 1)',
-));
+setTimeout(function (){env.tmp.t2 = 1}, 1000)
 setTimeout(console.log.bind(
 	console, 
-`	%cOnline:		` + env.data.time + ` Days
-	Device:		` + env.data.device + `: ` + $(window).width() + ` × ` + $(window).height()  + `
-	States:		` + env.data.states + `
-	Browser:	` + env.data.browser + ` [` + env.data.lang +`]
-
-	%c` + new Date() + `
-`,
-	'color: rgba(100, 102, 102, 0.8)',
-	'color: rgba(192, 194, 194, 1);'
+	'\n%c THEME %c しろい花 %c		ver.' + env.data.version.main + '\n',
+	'background-color: rgba(186, 138, 219, 0.9); color: white; font-weight: bolder;',
+	'background-color: rgba(186, 138, 219, 0.5); color: white;',
+	'color: rgba(192, 194, 194, 1);',
 ));
-setTimeout(console.groupEnd.bind());
-
-
-
-
-
-
-env.tmp.t2 = 'ok'
 
 

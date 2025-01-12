@@ -2,37 +2,68 @@
 <html lang="zh">
 
 <head>
-	<title>画室</title>
+	<title>-画室</title>
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<script src="https://s3.pstatp.com/cdn/expire-1-M/jquery/3.3.1/jquery.min.js"></script>
 	<link rel="preload" as="font" href="../../src/Poppins Regular.woff2" crossorigin="anonymous" />
-	<link rel="stylesheet" type="text/css" href="../main.css">
-	<link rel="stylesheet" type="text/css" href="style.css">
+	<link rel="stylesheet" type="text/css" href="../default.css">
 
 </head>
 
 <body>
 <script>
-	window.parent.postMessage('env.f.page.ok("- ' + document.title + '")', document.domain.length == 0 && '*' || '/');
-	history.pushState(null, null, location.href);
-
+	window.parent.postMessage('env.f.page.ok("' + document.title + '")', document.domain ? '/' : '*')
 	window.addEventListener('message', function(event) {
-		if (event.origin == 'null' || event.origin.includes('https://tatsuno.top')) {
-			eval(event.data);
-		}
-	});
+		if (event.origin == 'null' || event.origin.includes('https://sumiyo.link')) {eval(event.data)}
+	})
 
 	var music = {
-			name: 'Moon Child - 西原健一郎 / Nina Vidal',
-			src: '456041',
-			img: 'https://p2.music.126.net/jBO0wfjt5-AprTRmDzhtcQ==/6057209557711541.jpg?param=300y300',
+		name: 'Moon Child - 西原健一郎 & Nina Vidal',
+		src: '456041',
+		img: 'jBO0wfjt5-AprTRmDzhtcQ==/6057209557711541',
+		act: {lrc: true, js: "env.f.msg('这歌最适合放在这里了 ...', 5000)"}
 	}
 
-	window.parent.postMessage('player.f.add.ask(1, "' + music['name'] + '", "' + music['src'] + '", "' + music['img'] + '" )', document.domain.length == 0 && '*' || '/');
+	window.parent.postMessage('player.f.add.ask(1, "' + music.name + '", "' + music.src + '", "' + music.img + '", ' + music.act.lrc + ', "' + music.act.js + '" )', document.domain ? '/' : '*')
 
 </script>
+<style>
+
+	.imgBox1 {
+		aspect-ratio: 3364 / 2126;
+		width: 100%;
+		display: inline-block;
+	}
+
+	.imgBox1 img {
+		border-radius: 10px;
+		width: 100%;
+		opacity: 0;
+	}
+
+	.imgBox2 {
+		aspect-ratio: 2470 / 3475;
+		width: calc(50% - 10px);
+		display: inline-block;
+		vertical-align: top;
+	}
+
+	.imgBox2 img {
+		border-radius: 10px;
+		width: 100%;
+		opacity: 0;
+	}
+
+	@media screen and (max-width: 900px) {
+		.imgBox2 {
+			width: calc(50% - 5px);
+		}
+	}
+
+</style>
+
+
 
 	<!-- Mian -->
 	<div class="main" >
@@ -41,50 +72,64 @@
 		<i>—— 这里是我的画室，或者应该称之为画廊？</i>
 		<br />
 		<br class="f-1" />
-		<span>喜欢画画，同时也喜欢二次元。</span>
-		<br />
-		<span>这个画室里收藏着我的几件作品。水平有限只能完成铅笔稿。希望大家喜欢。</span>
-		<br />
-		<br class="f-1" />
-		<br class="f-1" />
-		<br class="f-1" />
+		<para>
+			<span>喜欢画画，同时也喜欢二次元。</span>
+			<br />
+			<span>这个画室里收藏着我为数不多的几件作品。水平有限只能完成铅笔稿。</span>
+		</para>
 
-
-		<h1>#. 1<span class="time1">—— <span class="time2">2023.8.16</span></span></h1>
-		<a class="imgBox1"  target="_blank" href="img/raw/千と千尋の神隠し.png" >
-			<img src="img/千と千尋の神隠し.webp" onload="$(this).addClass('fade-in-1')" />
-		</a>
-		<span>第一幅作品！「千と千尋の神隠し」中的场景。</span>
-		<br />
-		<i>专门选了一幅简单的来尝试。</i>
-		<br />
-		<br class="f-1" />
-		<br class="f-1" />
-
-		<h1>#. 2<span class="time1">—— <span class="time2">2023.10.1</span></span></h1>
-		<a class="imgBox1"  target="_blank" href="img/raw/もののけ姫.png" >
-			<img src="img/もののけ姫.webp" onload="$(this).addClass('fade-in-1')" />
-		</a>
-		<span>「もののけ姫」</span>
-		<br />
-		<i>第一次尝试复杂的人物绘画。经过再三调整后，总感觉还有点小毛病...</i>
-		<br />
-		<br class="f-1" />
-		<br class="f-1" />
-
-		<h1>#. 3<span class="time1">—— <span class="time2">2024.2.24</span></span></h1>
-		<div style="white-space: nowrap;" >
-			<a class="imgBox2"  target="_blank" href="img/raw/大神ミオ.png" >
-				<img src="img/大神ミオ.webp" onload="$(this).addClass('fade-in-1')" />
+		<para>
+			<a class="imgBox1"  target="_blank" href="img/raw/千と千尋の神隠し.png" >
+				<img src="img/千と千尋の神隠し.webp" onload="this.setAttribute('class', 'fade')" />
 			</a>
-			<a class="imgBox2"  target="_blank" href="https://www.vilipix.com/illust/103727402" style="float: right;" >
-				<img src="img/大神ミオ Original.webp" onload="$(this).addClass('fade-in-1')" />
-			</a>
-		</div>
-		<span>「大神ミオ」，<br class="f-3" />由画师泉彩设计。右图为 LUZZI 创作的原图。</span>
-		<br />
-		<i>Safebooru 上的意外收获。历经四个月的漫长创作后，我完成了它！这是目前最有挑战性的作品。</i>
+			<mat></mat>
+			<mat></mat>
+			<h3>千と千尋の神隠し</h3>
+			<i>2023.8.16</i>
+			<mat></mat>
+			<mat></mat>
+			<span>这是我的第一件作品！专门选了最简单的来进行尝试。</span>
+		</para>
 
+		<para>
+			<a class="imgBox1"  target="_blank" href="img/raw/もののけ姫.png" >
+				<img src="img/もののけ姫.webp" onload="this.setAttribute('class', 'fade')" />
+			</a>
+			<mat></mat>
+			<mat></mat>
+			<h3>もののけ姫</h3>
+			<i>2023.10.1</i>
+			<mat></mat>
+			<mat></mat>
+			<span>开始尝试复杂的人物绘画。</span>
+		</para>
+
+		<para>
+			<div style="white-space: nowrap;" >
+				<a class="imgBox2"  target="_blank" href="img/raw/大神ミオ.png" >
+					<img src="img/大神ミオ.webp" onload="this.setAttribute('class', 'fade')" />
+				</a>
+				<a class="imgBox2"  target="_blank" href="https://www.vilipix.com/illust/103727402" style="float: right;" >
+					<img src="img/大神ミオ Original.webp" onload="this.setAttribute('class', 'fade')" />
+				</a>
+			</div>
+			<mat></mat>
+			<mat></mat>
+			<h3>大神ミオ</h3>
+			<i>2024.2.24</i>
+			<mat></mat>
+			<mat></mat>
+			<span>在 Safebooru 上的意外收获。右侧为 LUZZI 创作的原图。</span>
+			<br />
+			<span>历经四个月的漫长创作后，我完成了它！这是目前最有挑战性的作品。尽管目前仍有诸多瑕疵，但我仍认为这次尝试是成功的。</span>
+		</para>
+
+		<para>
+			<h2>未来</h2>
+			<span>最近比较忙，画画的事可能要暂停一段时间了。</span>
+			<br />
+			<span>以后，一定要找个机会学习绘画！</span>
+		</para>
 	</div>
 
 </body>
