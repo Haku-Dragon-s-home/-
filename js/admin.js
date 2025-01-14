@@ -16,6 +16,7 @@ const env = {
 		'isMobile': (window.innerWidth < 900 ? true :false),
 		'key': null,
 		'ask': 0,
+		'p': 0,
 	},
 	'e': {
 		'input': document.querySelector('textarea'),
@@ -50,7 +51,6 @@ env.f.analysis = function(str) {
 			if (env.data.ask == 1) {
 				env.data.ask = 0
 				env.f.write('start to upload file\n	--header: ', false)
-
 				fetch('https://' + env.data.domain + '/admin.api', {
 					method: "POST",
 					headers: {
@@ -69,33 +69,42 @@ env.f.analysis = function(str) {
 				.then(json => {
 					env.f.write('succeed')
 					var i = 0
+					env.data.p = 0
 					clearInterval(env.timer.t1)
 
 					env.timer.t1 = setInterval(() => {
-						if (i == chunk.slice(-1)[0].chunk) {
-							env.f.write('operation successful, the file has been uploaded')
-							chunk = []
-							clearInterval(env.timer.t1)
-							return
-						}
-
 						env.f.write('	--chunk: ' + i)
-						fetch('https://' + env.data.domain + '/admin.api', {
-							method: "POST",
-							headers: {
-								"Authorization": i,
-								"Token": 2
-							},
-							body: chunk[i]
-						})
-						.then(response => {
-							if (response.ok) {
-								i ++
-								return response.json()
-							}
-						})
-						.catch(err => {env.f.write('fetch failed, try again')})
-
+						if (!env.data.p) {
+							env.data.p = 1
+							fetch('https://' + env.data.domain + '/admin.api', {
+								method: "POST",
+								headers: {
+									"Authorization": i,
+									"Token": 2
+								},
+								body: chunk[i]
+							})
+							.then(response => {
+								if (response.ok) {
+									return response.json()
+								}
+							})
+							.then(json => {
+								if (i == chunk.slice(-1)[0].chunk) {
+									env.f.write('operation successful, the file has been uploaded')
+									chunk = []
+									clearInterval(env.timer.t1)
+									return
+								} else {
+									i ++
+									env.data.p = 0
+								}
+							})
+							.catch(err => {
+								env.data.p = 0
+								env.f.write('fetch failed, try again')
+							})
+						}
 					}, 5000)
 				})
 				.catch(err => {env.f.write('failed\noperation cancelled')})
@@ -240,49 +249,58 @@ update root set 列名='新数据' where 列名='数据'											修改指定�
 
 				env.f.write('succeed\nstart to collect chunks')
 				var i = 0
+				env.data.p = 0
 				clearInterval(env.timer.t1)
 
 				env.timer.t1 = setInterval(() => {
-					if (i == n) {
-						env.f.write('operation successful, the file has been downloaded<a class="download" >download</a>')
-						var e = document.querySelector('.download')
-
-						// 创建一个 Blob 还原以数组形式储存的文件
-						var url = URL.createObjectURL(new Blob(chunk, { type: 'application/octet-stream' }))
-						e.href = url
-						e.download = file
-						e.click()
-
-						URL.revokeObjectURL(url)
-						chunk = []
-						e.remove()
-
-						clearInterval(env.timer.t1)
-						return
-					}
-
 					env.f.write('	--chunk: ' + i)
-					fetch('https://' + env.data.domain + '/admin.api', {
-						method: "POST",
-						headers: {
-							"Token": 1
-						},
-						body: JSON.stringify({
-							"key": env.data.key,
-							"sql": "SELECT * from file where name='c" + i + "'",
+					if (!env.data.p) {
+						env.data.p = 1
+						fetch('https://' + env.data.domain + '/admin.api', {
+							method: "POST",
+							headers: {
+								"Token": 1
+							},
+							body: JSON.stringify({
+								"key": env.data.key,
+								"sql": "SELECT * from file where name='c" + i + "'",
+							})
 						})
-					})
-					.then(response => {
-						if (response.ok) {
-							i ++
-							return response.json()
-						}
-					})
-					.then(json => {
-						chunk[i] = new Uint8Array(json.results[0].data).buffer
-					})
-					.catch(err => {env.f.write('fetch failed, try again')})
+						.then(response => {
+							if (response.ok) {
+								return response.json()
+							}
+						})
+						.then(json => {
+							chunk[i] = new Uint8Array(json.results[0].data).buffer
+							if (i == n) {
+								env.data.p = 1
+								env.f.write('operation successful, the file has been downloaded<a class="download" >download</a>')
+								var e = document.querySelector('.download')
 
+								// 创建一个 Blob 还原以数组形式储存的文件
+								var url = URL.createObjectURL(new Blob(chunk, { type: 'application/octet-stream' }))
+								e.href = url
+								e.download = file
+								e.click()
+
+								URL.revokeObjectURL(url)
+								chunk = []
+								e.remove()
+
+								clearInterval(env.timer.t1)
+								return
+
+							} else {
+								i ++
+								env.data.p = 0
+							}
+						})
+						.catch(err => {
+							env.data.p = 0
+							env.f.write('fetch failed, try again')
+						})
+					}
 				}, 5000)
 			})
 			.catch(err => {env.f.write('failed\noperation cancelled')})
@@ -292,6 +310,7 @@ update root set 列名='新数据' where 列名='数据'											修改指定�
 		if (cmd[1] == 'delete') {
 			env.f.write('start to delete data')
 			var i = 0
+			env.data.p = 0
 			clearInterval(env.timer.t1)
 
 			env.timer.t1 = setInterval(() => {
@@ -322,23 +341,30 @@ update root set 列名='新数据' where 列名='数据'											修改指定�
 				}
 
 				env.f.write('	--chunk: ' + i)
-				fetch('https://' + env.data.domain + '/admin.api', {
-					method: "POST",
-					headers: {
-						"Token": 1
-					},
-					body: JSON.stringify({
-						"key": env.data.key,
-						"sql": "UPDATE file set data = ''",
+				if (!env.data.p) {
+					env.data.p = 1
+					fetch('https://' + env.data.domain + '/admin.api', {
+						method: "POST",
+						headers: {
+							"Token": 1
+						},
+						body: JSON.stringify({
+							"key": env.data.key,
+							"sql": "UPDATE file set data = ''",
+						})
 					})
-				})
-				.then(response => {
-					if (response.ok) {
-						i ++
-						return response.json()
-					}
-				})
-				.catch(err => {env.f.write('fetch failed, try again')})
+					.then(response => {
+						if (response.ok) {
+							i ++
+							env.data.p = 0
+							return response.json()
+						}
+					})
+					.catch(err => {
+						env.data.p = 0
+						env.f.write('fetch failed, try again')
+					})
+				}
 			}, 5000)
 			return
 		}
