@@ -90,11 +90,9 @@ env.f.analysis = function(str) {
 						})
 						.then(response => {
 							if (response.ok) {
+								i ++
 								return response.json()
 							}
-						})
-						.then(json => {
-							i ++
 						})
 						.catch(err => {env.f.write('fetch failed, try again')})
 
@@ -199,6 +197,10 @@ update root set 列名='新数据' where 列名='数据'											修改指定�
 		}
 	}
 
+
+
+	if (!env.data.key) {return}
+
 	if (cmd[0] == 'file' && cmd.length == 2) {
 		if (cmd[1] == 'upload') {
 			env.f.write('<input class="upload" type="file" />select the file to upload')
@@ -272,12 +274,12 @@ update root set 列名='新数据' where 列名='数据'											修改指定�
 					})
 					.then(response => {
 						if (response.ok) {
+							i ++
 							return response.json()
 						}
 					})
 					.then(json => {
 						chunk[i] = new Uint8Array(json.results[0].data).buffer
-						i ++
 					})
 					.catch(err => {env.f.write('fetch failed, try again')})
 
@@ -332,11 +334,9 @@ update root set 列名='新数据' where 列名='数据'											修改指定�
 				})
 				.then(response => {
 					if (response.ok) {
+						i ++
 						return response.json()
 					}
-				})
-				.then(json => {
-					i ++
 				})
 				.catch(err => {env.f.write('fetch failed, try again')})
 			}, 5000)
@@ -344,78 +344,74 @@ update root set 列名='新数据' where 列名='数据'											修改指定�
 		}
 	}
 
-	if (env.data.key) {
-		if (['update', 'select', 'create', 'drop', 'alter', 'insert', 'delete'].includes(cmd[0])) {
-			fetch('https://' + env.data.domain + '/admin.api', {
-				method: "POST",
-				headers: {
-					"Token": 1,
-				},
-				body: JSON.stringify({
-					"key": env.data.key,
-					"sql": str,
-				})
+	if (['update', 'select', 'create', 'drop', 'alter', 'insert', 'delete'].includes(cmd[0])) {
+		fetch('https://' + env.data.domain + '/admin.api', {
+			method: "POST",
+			headers: {
+				"Token": 1,
+			},
+			body: JSON.stringify({
+				"key": env.data.key,
+				"sql": str,
 			})
-			.then(response => {
-				if (response.ok) {
-					return response.json()
-				}
-			})
-			.then(json => {
-				env.f.table(json)
-				return
-			})
-			.catch(err => {env.f.write(('<err>' + err + '</err>').toLowerCase())})
-		}
-
-
-
-		if (cmd[0] == 'pool') {
-			if (cmd.length == 6 && cmd[1] == 'add') {
-				var id = cmd[5]
-				if (cmd[5] == "") {
-					var now = new Date()
-					var options = {timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }
-					var formatter = new Intl.DateTimeFormat('en-US', options)
-					var parts = formatter.formatToParts(now).reduce((acc, part) => ({ ...acc, [part.type]: part.value }), {})
-					var id = `${parts.year}-${parts.month}-${parts.day} ${parts.hour}:${parts.minute}:${parts.second}`
-				}
-
-				var sql = "INSERT INTO comment (id, deletable, name, content) VALUES ('" + id + "', '" + cmd[4] + "', '" + cmd[2] + "', '" + cmd[3] + "'); UPDATE root set content=content+1 where data='comment'"
+		})
+		.then(response => {
+			if (response.ok) {
+				return response.json()
 			}
-
-			if (cmd.length == 3 && cmd[1] == 'delete') {
-				var sql = "DELETE FROM comment WHERE id = '" + cmd[2] + "'; UPDATE root set content=content-1 where data='comment'"
-			}
-
-			if (cmd.length == 3 && cmd[1] == 'read') {
-				var sql = "SELECT * FROM comment ORDER BY id DESC LIMIT " + cmd[2] + ", 5"
-			}
-
-			fetch('https://' + env.data.domain + '/admin.api', {
-				method: "POST",
-				headers: {
-					"Token": 1,
-				},
-				body: JSON.stringify({
-					"key": env.data.key,
-					"sql": sql,
-				})
-			})
-			.then(response => {
-				if (response.ok) {
-					return response.json()
-				}
-			})
-			.then(json => {
-				env.f.table(json)
-				return
-			})
-			.catch(err => {env.f.write(('<err>' + err + '</err>').toLowerCase())})
-		}
+		})
+		.then(json => {
+			env.f.table(json)
+			return
+		})
+		.catch(err => {env.f.write(('<err>' + err + '</err>').toLowerCase())})
 	}
 
 
+
+	if (cmd[0] == 'pool') {
+		if (cmd.length == 6 && cmd[1] == 'add') {
+			var id = cmd[5]
+			if (cmd[5] == "") {
+				var now = new Date()
+				var options = {timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }
+				var formatter = new Intl.DateTimeFormat('en-US', options)
+				var parts = formatter.formatToParts(now).reduce((acc, part) => ({ ...acc, [part.type]: part.value }), {})
+				var id = `${parts.year}-${parts.month}-${parts.day} ${parts.hour}:${parts.minute}:${parts.second}`
+			}
+
+			var sql = "INSERT INTO comment (id, deletable, name, content) VALUES ('" + id + "', '" + cmd[4] + "', '" + cmd[2] + "', '" + cmd[3] + "'); UPDATE root set content=content+1 where data='comment'"
+		}
+
+		if (cmd.length == 3 && cmd[1] == 'delete') {
+			var sql = "DELETE FROM comment WHERE id = '" + cmd[2] + "'; UPDATE root set content=content-1 where data='comment'"
+		}
+
+		if (cmd.length == 3 && cmd[1] == 'read') {
+			var sql = "SELECT * FROM comment ORDER BY id DESC LIMIT " + cmd[2] + ", 5"
+		}
+
+		fetch('https://' + env.data.domain + '/admin.api', {
+			method: "POST",
+			headers: {
+				"Token": 1,
+			},
+			body: JSON.stringify({
+				"key": env.data.key,
+				"sql": sql,
+			})
+		})
+		.then(response => {
+			if (response.ok) {
+				return response.json()
+			}
+		})
+		.then(json => {
+			env.f.table(json)
+			return
+		})
+		.catch(err => {env.f.write(('<err>' + err + '</err>').toLowerCase())})
+	}
 
 	env.f.write('<err>[ERROR]</err> unkown command, or you do not have sufficient permissions to execute this command')
 }

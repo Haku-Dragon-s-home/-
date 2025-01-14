@@ -32,9 +32,10 @@
 	if (m == "2") {
 		var i = context.request.headers.get('Authorization')
 		var chunk = await context.request.arrayBuffer()
-		r.msg = {"chunk": i}
+		var n = "c" + i
+		r.msg = i
 
-		await context.env.MetaDB.prepare('UPDATE file set data=? where name=?').bind(chunk, "c" + i).all()
+		await context.env.MetaDB.prepare('UPDATE file set data=? where name=?').bind(chunk, n).all()
 	}
 
 
