@@ -36,12 +36,10 @@
 	// 文件上传
 	if (m == "2") {
 		var body = await context.request.arrayBuffer()
-
 		var i = context.request.headers.get('Authorization')
-		var n = "c" + i
-		r.msg = [n, body]
 
-//		await context.env.MetaDB.prepare('UPDATE file set data=? where name=?').bind(body, n).all()
+		r.msg = {chunk: i}
+		await context.env.MetaDB.prepare('UPDATE file set data=? where name=?').bind(body, "c" + i).all()
 	}
 
 
