@@ -5,8 +5,10 @@
 	if (!m) {return Response.json(r)}
 
 	// 登录
-	if (m == "0" && body.key) {
+	if (m == "0") {
 		var body = await context.request.json()
+		if (!body.key) {return Response.json(r)}
+
 		var key = await context.env.MetaDB.prepare('SELECT * from root where data="adminKey"').first()
 		var key = key.content
 		r.success = true
@@ -19,8 +21,10 @@
 	}
 
 	// 执行 SQL 命令
-	if (m == "1" && body.key && body.sql) {
+	if (m == "1") {
 		var body = await context.request.json()
+		if (!body.key || !body.sql) {return Response.json(r)}
+
 		var key = await context.env.MetaDB.prepare('SELECT * from root where data="adminKey"').first()
 		var key = key.content
 		if (body.key == key) {
@@ -32,6 +36,7 @@
 	// 文件上传
 	if (m == "2") {
 		var body = await context.request.arrayBuffer()
+
 		var i = context.request.headers.get('Authorization')
 		var n = "c" + i
 		r.msg = [n, body]
