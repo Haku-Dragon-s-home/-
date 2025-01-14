@@ -170,4 +170,9 @@ tr {
 	background-color: rgba(var(--t-t1), 0.1);
 }
 
+upload,
+download {
+	display: none;
+}
+
 

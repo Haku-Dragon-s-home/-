@@ -18,18 +18,8 @@
 		}
 	}
 
-	// 修改密码
-	if (m == "1" && body.old && body.new) {
-		var key = await context.env.MetaDB.prepare('SELECT * from root where data="adminKey"').first()
-		var key = key.content
-		if (body.old == key) {
-			r = await context.env.MetaDB.prepare('UPDATE root set content=? where data="adminKey"').bind(body.new).all()
-			r.msg = "change key"
-		}
-	}
-
 	// 执行 SQL 命令
-	if (m == "2" && body.key && body.sql) {
+	if (m == "1" && body.key && body.sql) {
 		var key = await context.env.MetaDB.prepare('SELECT * from root where data="adminKey"').first()
 		var key = key.content
 		if (body.key == key) {
@@ -37,6 +27,16 @@
 			r.msg = null
 		}
 	}
+
+	// 文件上传
+	if (m == "2") {
+		var i = context.request.headers.get('Authorization')
+		var chunk = await context.request.arrayBuffer()
+		r.msg = {"chunk": i}
+
+		await context.env.MetaDB.prepare('UPDATE file set data=? where name=?').bind(chunk, "c" + i).all()
+	}
+
 
 	return Response.json(r)
 
