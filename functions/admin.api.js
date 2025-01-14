@@ -3,10 +3,10 @@
 	var r = {success: false, meta: {}, results: [], msg: "Invalid Input"}
 
 	if (!m) {return Response.json(r)}
-	var body = await context.request.json()
 
 	// 登录
 	if (m == "0" && body.key) {
+		var body = await context.request.json()
 		var key = await context.env.MetaDB.prepare('SELECT * from root where data="adminKey"').first()
 		var key = key.content
 		r.success = true
@@ -20,6 +20,7 @@
 
 	// 执行 SQL 命令
 	if (m == "1" && body.key && body.sql) {
+		var body = await context.request.json()
 		var key = await context.env.MetaDB.prepare('SELECT * from root where data="adminKey"').first()
 		var key = key.content
 		if (body.key == key) {
@@ -30,12 +31,12 @@
 
 	// 文件上传
 	if (m == "2") {
+		var body = await context.request.arrayBuffer()
 		var i = context.request.headers.get('Authorization')
-		var chunk = await context.request.arrayBuffer()
 		var n = "c" + i
-		r.msg = [n, chunk]
+		r.msg = [n, body]
 
-//		await context.env.MetaDB.prepare('UPDATE file set data=? where name=?').bind(chunk, n).all()
+//		await context.env.MetaDB.prepare('UPDATE file set data=? where name=?').bind(body, n).all()
 	}
 
 
