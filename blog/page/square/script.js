@@ -142,7 +142,7 @@ env.f.load = function() {
 			info.innerText = '[' + d[i].id.substring(0, 16) + ']'
 			span.appendChild(info)
 
-		if (d[i].deletable == '1') {
+		if (d[i].op == '0') {
 			if (parseInt(d[i].id.replace(/:/g, '').replace(/-/g, '').replace(/ /g, '')) + 7000000 > parseInt(env.f.time())) {
 				var a = document.createElement('a')
 					a.innerHTML = '[删除]'
@@ -152,7 +152,7 @@ env.f.load = function() {
 			}
 		}
 
-		if (d[i].deletable == '0') {
+		if (d[i].op == '1') {
 			name.setAttribute('class', 'op')
 		}
 	}

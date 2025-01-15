@@ -562,7 +562,7 @@ window.addEventListener('load',function(){
 		})
 		.then(response => {return response.json()})
 		.then(json => {
-			env.data.visitors = Number(json.results[0].content)
+			env.data.visitors = Number(json.results[0].data)
 			env.f.setCookie('Cookie !')
 
 			document.getElementById('_2').innerHTML = env.data.visitors

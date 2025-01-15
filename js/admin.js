@@ -449,6 +449,7 @@ alter table 表名 rename column 旧列名 to 新列名											重命名列
 			return
 		})
 		.catch(err => {env.f.write(('<span class="a1" >' + err + '</span>').toLowerCase())})
+		return
 	}
 
 	env.f.write('<span class="a1" >unkown command, or you do not have sufficient permissions to execute this command</span>')
@@ -460,7 +461,7 @@ env.f.write = function(str, wrap = true) {
 		span.innerHTML = str + (wrap ? '<br />' : '')
 
 	env.e.output.appendChild(span)
-	window.scrollTo(0, document.documentElement.scrollHeight)
+	env.e.output.parentNode.scrollTo(0, env.e.output.parentNode.scrollHeight)
 }
 
 env.f.table = function(d) {
