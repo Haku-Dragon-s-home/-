@@ -72,7 +72,7 @@ env.f.init = function() {
 			}
 		})
 		.then(json => {
-			env.data.cn = Number(json.results[0].content)
+			env.data.cn = Number(json.results[0].data)
 			env.data.pn = Math.ceil(env.data.cn / 5)
 			document.getElementById('_2').innerHTML = env.data.cn
 

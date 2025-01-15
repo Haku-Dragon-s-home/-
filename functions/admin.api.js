@@ -10,10 +10,9 @@
 		if (!body.key) {return Response.json(r)}
 
 		var key = await context.env.MetaDB.prepare('SELECT * from root where name="key"').first()
-		var key = key.content
 		r.success = true
 		r.msg = null
-		if (body.key == key) {
+		if (body.key == key.data) {
 			r.results.push({"login": 1})
 		} else {
 			r.results.push({"login": 0})
@@ -26,8 +25,7 @@
 		if (!body.key || !body.sql) {return Response.json(r)}
 
 		var key = await context.env.MetaDB.prepare('SELECT * from root where name="key"').first()
-		var key = key.content
-		if (body.key == key) {
+		if (body.key == key.data) {
 			r = await context.env.MetaDB.prepare(body.sql).all()
 			r.msg = null
 		}
