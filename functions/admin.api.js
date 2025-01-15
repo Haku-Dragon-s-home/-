@@ -9,7 +9,7 @@
 		var body = await context.request.json()
 		if (!body.key) {return Response.json(r)}
 
-		var key = await context.env.MetaDB.prepare('SELECT * from root where data="adminKey"').first()
+		var key = await context.env.MetaDB.prepare('SELECT * from root where name="key"').first()
 		var key = key.content
 		r.success = true
 		r.msg = null
@@ -25,7 +25,7 @@
 		var body = await context.request.json()
 		if (!body.key || !body.sql) {return Response.json(r)}
 
-		var key = await context.env.MetaDB.prepare('SELECT * from root where data="adminKey"').first()
+		var key = await context.env.MetaDB.prepare('SELECT * from root where name="key"').first()
 		var key = key.content
 		if (body.key == key) {
 			r = await context.env.MetaDB.prepare(body.sql).all()
@@ -39,8 +39,10 @@
 		var i = context.request.headers.get('Authorization')
 
 		r.msg = {chunk: i}
+		r.success = true
 		await context.env.MetaDB.prepare('UPDATE file set data=? where name=?').bind(body, "c" + i).all()
 	}
+
 
 
 	return Response.json(r)

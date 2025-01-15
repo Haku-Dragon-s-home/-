@@ -3,7 +3,6 @@
 
 /*	admin.js
  *	created by sumiyo, 2024/7/29
- *	version: BETA 0.00.014
 
 	*/
 
@@ -20,7 +19,7 @@ const env = {
 	},
 	'e': {
 		'input': document.querySelector('textarea'),
-		'output': document.querySelector('.console'),
+		'output': document.querySelector('.console div'),
 
 	},
 
@@ -37,20 +36,20 @@ const env = {
 env.f.analysis = function(str) {
 	// 解析命令
 	var cmd = (str.match(/"[^"]+"|\S+/g) || []).map(part => part.replace(/^"|"$/g, ''))
-	env.f.write('<cmd>' + str + '</cmd>')
+	env.f.write('<span class="a2" >' + str + '</span>')
 
 
 
 	if (env.data.ask) {
 		if (cmd[0].toLowerCase() == 'y' || cmd[0].toLowerCase() == 'n') {
 			if (cmd[0].toLowerCase() == 'n') {
-				env.f.write('operation cancelled')
+				env.f.write('<span class="a1" >operation cancelled</span>')
 				env.data.ask = 0
 				return
 			}
 			if (env.data.ask == 1) {
 				env.data.ask = 0
-				env.f.write('start to upload file\n	--header: ', false)
+				env.f.write('start to upload file.\n	--header: ', false)
 				fetch('https://' + env.data.domain + '/admin.api', {
 					method: "POST",
 					headers: {
@@ -67,7 +66,7 @@ env.f.analysis = function(str) {
 					}
 				})
 				.then(json => {
-					env.f.write('succeed')
+					env.f.write('success')
 					var i = 0
 					env.data.p = 0
 					clearInterval(env.timer.t1)
@@ -91,7 +90,7 @@ env.f.analysis = function(str) {
 							})
 							.then(json => {
 								if (i == chunk.slice(-1)[0].chunk) {
-									env.f.write('operation successful, the file has been uploaded')
+									env.f.write('<span class="a1" >operation successful, the file has been uploaded.</span>')
 									chunk = []
 									clearInterval(env.timer.t1)
 									return
@@ -102,23 +101,23 @@ env.f.analysis = function(str) {
 							})
 							.catch(err => {
 								env.data.p = 0
-								env.f.write('fetch failed, try again')
+								env.f.write('<span class="a1" >fetch failed, try again automatically.</span>')
 							})
 						}
 					}, 5000)
 				})
-				.catch(err => {env.f.write('failed\noperation cancelled')})
+				.catch(err => {env.f.write('failed\n<span class="a1" >operation cancelled</span>')})
 				return
 			}
 		}
-		env.f.write('next step ? [Y/N]')
+		env.f.write('next step ? <span class="a1" >[Y/N]</span>')
 		return
 	}
 
 
 
 	if (cmd[0] == 'help') {
-		env.f.write(`---------------------- [ <warn>帮助</warn> ] ----------------------------
+		env.f.write(`---------------------- <span class="a2" >[ <span class="a1" >help</span> ]</span> ----------------------------
 help									查看帮助信息
 cls									清除控制台
 login "密码"							登录
@@ -134,7 +133,9 @@ file delete							删除文件
 select name from sqlite_schema where type='table' and name != '_cf_KV' ORDER BY name		查询所有表名
 select * from 表名																	查询指定表的全部数据
 select * from 表名 where 列名='数据'													查询指定表指定行的数据
-update root set 列名='新数据' where 列名='数据'											修改指定位置的数据
+update 表名 set 列名='新数据' where 列名='数据'											修改指定位置的数据
+alter table 旧表名 rename to 新表名													重命名表
+alter table 表名 rename column 旧列名 to 新列名											重命名列
 -----------------------------------------------------------`)
 		return
 	}
@@ -146,7 +147,7 @@ update root set 列名='新数据' where 列名='数据'											修改指定�
 	if (cmd[0] == 'login') {
 		if (cmd.length == 2) {
 			if (cmd[1] == 'out') {	
-				env.f.write('<warn>[INFO]</warn> the sys has logged out')
+				env.f.write('<span class="a1" >the system has logged out, advanced functions are currently unavailable.</span>')
 				env.data.key = null
 				return
 			}
@@ -167,14 +168,15 @@ update root set 列名='新数据' where 列名='数据'											修改指定�
 			})
 			.then(json => {
 				if (json.results[0].login) {
-					env.f.write('<su>[SUCCEED] </su>your key is correct, you have successfully logged in now')
+					env.f.write('<span class="a1" >your key is correct, you have successfully logged in now.</span>')
 					env.data.key = cmd[1]
 				} else {
-					env.f.write('<err>[FAILED] </err>your key is incorrect, please try again')
+					env.f.write('<span class="a1" >your key is incorrect, please try again.</span>')
 				}
 				return
 			})
-			.catch(err => {env.f.write(('<err>' + err + '</err>').toLowerCase())})
+			.catch(err => {env.f.write(('<span class="a1" >' + err + '</span>').toLowerCase())})
+			return
 		}
 
 		if (cmd.length == 3 && env.data.key) {
@@ -186,7 +188,7 @@ update root set 列名='新数据' where 列名='数据'											修改指定�
 					},
 					body: JSON.stringify({
 						"key": cmd[1],
-						"sql": "UPDATE root set content='" + cmd[2] + "' where data='adminKey'",
+						"sql": "UPDATE root set data='" + cmd[2] + "' where name='key'",
 					})
 				})
 				.then(response => {
@@ -195,24 +197,28 @@ update root set 列名='新数据' where 列名='数据'											修改指定�
 					}
 				})
 				.then(json => {
-						env.f.write('<su>[SUCCEED] </su> key changed: "' + cmd[1] + '" => "' + cmd[2] + '"')
+						env.f.write('<span class="a1" >key changed: "' + cmd[1] + '" => "' + cmd[2] + '"</span>')
 						env.data.key = cmd[2]
 						return
 				})
-				.catch(err => {env.f.write(('<err>' + err + '</err>').toLowerCase())})
+				.catch(err => {env.f.write(('<span class="a1" >' + err + '</span>').toLowerCase())})
 			} else {
-				env.f.write('<err>[FAILED] </err>your original key is incorrect, please try again')
+				env.f.write('<span class="a1" >your original key is incorrect, please try again.</span>')
 			}
+			return
 		}
 	}
 
 
 
-	if (!env.data.key) {return}
+	if (!env.data.key) {
+		env.f.write('<span class="a1" >unkown command, or you do not have sufficient permissions to execute this command</span>')
+		return
+	}
 
 	if (cmd[0] == 'file' && cmd.length == 2) {
 		if (cmd[1] == 'upload') {
-			env.f.write('<input class="upload" type="file" />select the file to upload')
+			env.f.write('<input class="upload" type="file" />select the file to upload.')
 			var e = document.querySelector('.upload')
 			e.click()
 
@@ -226,7 +232,7 @@ update root set 列名='新数据' where 列名='数据'											修改指定�
 		}
 
 		if (cmd[1] == 'download') {
-			env.f.write('start to collect data\n	--header: ', false)
+			env.f.write('start to collect data.\n	--header: ', false)
 			fetch('https://' + env.data.domain + '/admin.api', {
 				method: "POST",
 				headers: {
@@ -247,7 +253,7 @@ update root set 列名='新数据' where 列名='数据'											修改指定�
 				var n = json.results[0].data.split('###')[1]
 				chunk = []
 
-				env.f.write('succeed\nstart to collect chunks')
+				env.f.write('success\nstart to collect chunks')
 				var i = 0
 				env.data.p = 0
 				clearInterval(env.timer.t1)
@@ -273,9 +279,9 @@ update root set 列名='新数据' where 列名='数据'											修改指定�
 						})
 						.then(json => {
 							chunk[i] = new Uint8Array(json.results[0].data).buffer
-							if (i == n) {
+							if (i == n - 1) {
 								env.data.p = 1
-								env.f.write('operation successful, the file has been downloaded<a class="download" >download</a>')
+								env.f.write('<span class="a1" >operation successful, the file has been downloaded.</span><a class="download" >download</a>')
 								var e = document.querySelector('.download')
 
 								// 创建一个 Blob 还原以数组形式储存的文件
@@ -303,43 +309,17 @@ update root set 列名='新数据' where 列名='数据'											修改指定�
 					}
 				}, 5000)
 			})
-			.catch(err => {env.f.write('failed\noperation cancelled')})
+			.catch(err => {env.f.write('failed\n<span class="a1" >operation cancelled.</span>')})
 			return
 		}
 
 		if (cmd[1] == 'delete') {
-			env.f.write('start to delete data')
+			env.f.write('start to delete data.')
 			var i = 0
 			env.data.p = 0
 			clearInterval(env.timer.t1)
 
 			env.timer.t1 = setInterval(() => {
-				if (i == 10) {
-					env.f.write('reset header')
-					fetch('https://' + env.data.domain + '/admin.api', {
-						method: "POST",
-						headers: {
-							"Token": 1
-						},
-						body: JSON.stringify({
-							"key": env.data.key,
-							"sql": "UPDATE file set data='0###0' where name='header'"
-						})
-					})
-					.then(response => {
-						if (response.ok) {
-							return response.json()
-						}
-					})
-					.then(json => {
-						env.f.write('operation successful, the file has been deleted')
-					})
-					.catch(err => {env.f.write('fetch failed, try again')})
-
-					clearInterval(env.timer.t1)
-					return
-				}
-
 				env.f.write('	--chunk: ' + i)
 				if (!env.data.p) {
 					env.data.p = 1
@@ -350,19 +330,48 @@ update root set 列名='新数据' where 列名='数据'											修改指定�
 						},
 						body: JSON.stringify({
 							"key": env.data.key,
-							"sql": "UPDATE file set data = ''",
+							"sql": "UPDATE file set data = '' where name='c" + i + "'"
 						})
 					})
 					.then(response => {
 						if (response.ok) {
+							return response.json()
+						}
+					})
+
+					.then(json => {
+						if (i == 9) {
+							env.f.write('reset header')
+							fetch('https://' + env.data.domain + '/admin.api', {
+								method: "POST",
+								headers: {
+									"Token": 1
+								},
+								body: JSON.stringify({
+									"key": env.data.key,
+									"sql": "UPDATE file set data='0###0' where name='header'"
+								})
+							})
+							.then(response => {
+								if (response.ok) {
+									return response.json()
+								}
+							})
+							.then(json => {
+								env.f.write('<span class="a1" >operation successful, the file has been deleted.</span>')
+							})
+							.catch(err => {env.f.write('<span class="a1" >fetch failed, try again automatically.</span>')})
+
+							clearInterval(env.timer.t1)
+							return
+						} else {
 							i ++
 							env.data.p = 0
-							return response.json()
 						}
 					})
 					.catch(err => {
 						env.data.p = 0
-						env.f.write('fetch failed, try again')
+						.catch(err => {env.f.write('<span class="a1" >fetch failed, try again automatically.</span>')})
 					})
 				}
 			}, 5000)
@@ -388,9 +397,10 @@ update root set 列名='新数据' where 列名='数据'											修改指定�
 		})
 		.then(json => {
 			env.f.table(json)
+			env.f.write(`<span onclick="this.parentNode.querySelectorAll('span')[1].removeAttribute('style'); this.remove()" class="a1" >[raw data]</span><span style="display: none;" >` + JSON.stringify(json) + `</span>`)
 			return
 		})
-		.catch(err => {env.f.write(('<err>' + err + '</err>').toLowerCase())})
+		.catch(err => {env.f.write(('<span class="a1" >' + err + '</span>').toLowerCase())})
 	}
 
 
@@ -406,15 +416,15 @@ update root set 列名='新数据' where 列名='数据'											修改指定�
 				var id = `${parts.year}-${parts.month}-${parts.day} ${parts.hour}:${parts.minute}:${parts.second}`
 			}
 
-			var sql = "INSERT INTO comment (id, deletable, name, content) VALUES ('" + id + "', '" + cmd[4] + "', '" + cmd[2] + "', '" + cmd[3] + "'); UPDATE root set content=content+1 where data='comment'"
+			var sql = "INSERT INTO pool (id, op, name, content) VALUES ('" + id + "', '" + cmd[4] + "', '" + cmd[2] + "', '" + cmd[3] + "'); UPDATE root set data=data+1 where name='comment'"
 		}
 
 		if (cmd.length == 3 && cmd[1] == 'delete') {
-			var sql = "DELETE FROM comment WHERE id = '" + cmd[2] + "'; UPDATE root set content=content-1 where data='comment'"
+			var sql = "DELETE FROM pool WHERE id = '" + cmd[2] + "'; UPDATE root set data=data-1 where name='comment'"
 		}
 
 		if (cmd.length == 3 && cmd[1] == 'read') {
-			var sql = "SELECT * FROM comment ORDER BY id DESC LIMIT " + cmd[2] + ", 5"
+			var sql = "SELECT * FROM pool ORDER BY id DESC LIMIT " + cmd[2] + ", 5"
 		}
 
 		fetch('https://' + env.data.domain + '/admin.api', {
@@ -434,12 +444,13 @@ update root set 列名='新数据' where 列名='数据'											修改指定�
 		})
 		.then(json => {
 			env.f.table(json)
+			env.f.write(`<span onclick="this.parentNode.querySelectorAll('span')[1].removeAttribute('style'); this.remove()" class="a1" >[raw data]</span><span style="display: none;" >` + JSON.stringify(json) + `</span>`)
 			return
 		})
-		.catch(err => {env.f.write(('<err>' + err + '</err>').toLowerCase())})
+		.catch(err => {env.f.write(('<span class="a1" >' + err + '</span>').toLowerCase())})
 	}
 
-	env.f.write('<err>[ERROR]</err> unkown command, or you do not have sufficient permissions to execute this command')
+	env.f.write('<span class="a1" >unkown command, or you do not have sufficient permissions to execute this command</span>')
 }
 
 env.f.write = function(str, wrap = true) {
@@ -472,7 +483,7 @@ env.f.table = function(d) {
 		var body = body + '<tr>' + tmp + '</tr>'
 	}
 
-	env.f.write(`<table border="1"><thead><tr>` + head + `</tr></thead><tbody>` + body + `</tbody></table><span><span onclick="this.parentNode.querySelector('info').removeAttribute('style'); this.remove()" >[show the raw data]</span><info style="display: none;" >` + JSON.stringify(d) + `</span></span>`)
+	env.f.write(`<table border="1"><thead><tr>` + head + `</tr></thead><tbody>` + body + `</tbody></table>`, false)
 }
 
 env.f.chunk = function(file) {
@@ -548,8 +559,8 @@ env.e.input.addEventListener('keypress', function (e) {
 
 
 env.e.output.innerHTML = ''
-env.f.write(new Date())
-env.f.write('init env<br />')
-env.f.write('<info>login to use the sys functions<info>')
+env.f.write('<span class="a2" >' + new Date() + '</span>')
+env.f.write('init <span class="a1" >env</span>\n')
+env.f.write('login to enable advanced functions.')
 
 

@@ -1,27 +1,21 @@
 ﻿export async function onRequest(context) {
-	var mod = context.request.headers.get('Token')
+	var m = context.request.headers.get('Token')
+	var r = {success: false, meta: {}, results: [], msg: "Invalid Input"}
 
-	var reData = {success: false, meta: {}, results: []}
-	reData.msg = 'Invalid Input'
-	if (mod == null) {
-		return Response.json(reData)
-	}
-
-	var cont = await context.request.json()
+	if (!m) {return Response.json(r)}
+	var body = await context.request.json()
 
 	// 删除留言
-	if (mod == "0") {
-		await context.env.MetaDB.prepare('DELETE FROM comment WHERE deletable = 1 and id = ?').bind(cont.id).first()
-		await context.env.MetaDB.prepare('UPDATE root set content = content - 1 where data="comment"').first()
+	if (m == "0") {
+		await context.env.MetaDB.prepare('DELETE FROM pool WHERE op = 1 and id = ?').bind(body.id).first()
+		await context.env.MetaDB.prepare('UPDATE root set data=data-1 where name="comment"').first()
 
-		reData.msg = 'delete: ' + id
+		r.msg = {delete: id}
 	}
 
 	// 添加留言
-	if (mod == "1") {
-		if (cont.content.length > 200 || cont.name.length > 20) {
-			return Response.json(reData)
-		}
+	if (m == "1") {
+		if (body.content.length > 200 || body.name.length > 20) {return Response.json(r)}
 
 		// 生成一个 id
 		var now = new Date()
@@ -30,27 +24,27 @@
 		var parts = formatter.formatToParts(now).reduce((acc, part) => ({ ...acc, [part.type]: part.value }), {})
 		var id = `${parts.year}-${parts.month}-${parts.day} ${parts.hour}:${parts.minute}:${parts.second}`
 
-		await context.env.MetaDB.prepare('INSERT INTO comment (id, deletable, name, content) VALUES (?, ?, ?, ?)').bind(id, '1', cont.name, cont.content).first()
-		await context.env.MetaDB.prepare('UPDATE root set content = content + 1 where data="comment"').first()
-	
-		reData.msg = 'add: ' + id
+		await context.env.MetaDB.prepare('INSERT INTO pool (id, op, name, content) VALUES (?, ?, ?, ?)').bind(id, '1', body.name, body.content).first()
+		await context.env.MetaDB.prepare('UPDATE root set data=data+1 where name="comment"').first()
+
+		r.msg = {add: id}
 	}
 
 	// 读取留言数据
-	if (mod == "2") {
-		reData = await context.env.MetaDB.prepare('SELECT * FROM comment ORDER BY id DESC LIMIT ?, 5').bind(cont.page).all()
-		reData.msg = 'page: ' + cont.page
+	if (m == "2") {
+		r = await context.env.MetaDB.prepare('SELECT * FROM pool ORDER BY id DESC LIMIT ?, 5').bind(body.page).all()
+		r.msg = {page: body.page}
 	}
 
 	// 获取留言总数
-	if (mod == "3") {
-		reData = await context.env.MetaDB.prepare('SELECT * from root where data="comment"').all()
-		reData.msg = null
+	if (m == "3") {
+		r = await context.env.MetaDB.prepare('SELECT * from root where name="comment"').all()
+		r.msg = null
 	}
 
 
 
-	return Response.json(reData)
+	return Response.json(r)
 }
 
 
