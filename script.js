@@ -11,9 +11,9 @@
 env.data.version.main = '1.0.24'
 
 // 通知列表
-env.data.list.info = [
+env.data.list.news = [
 	{
-		date: '1.01',
+		date: '1.16',
 		name: '主题优化',
 		des: '不优雅的东西，删掉！\n2025 新年快乐',
 	},
@@ -57,6 +57,7 @@ env.timer.t2 = null
 	env.timer.t2
 	env.timer.t3
 	env.timer.t4
+	env.timer.t5
 
 	_1
 	_2
@@ -144,24 +145,6 @@ env.f.getCookie = function(name) {
 env.f.getRandom = function(min, max) {
 	// 生成随机整数
 	return Math.floor(Math.random() * (max - min + 1)) + min
-}
-
-env.f.getBrowser = function() {
-	// 获取浏览器类型
-	var r = window.navigator.userAgent;
-	if (r.indexOf("Chrome") != -1) {
-		return "Chrome"
-	} else if (r.indexOf("Firefox") != -1) {
-		return "Firefox"
-	} else if (r.indexOf("Safari") != -1) {
-		return "Safari"
-	} else if (r.indexOf("Edge") != -1) {
-		return "Edge"
-	} else if (r.indexOf("MSIE") != -1 || r.indexOf("Trident/") != -1) {
-		return "IE"
-	} else {
-		return "Unknown"
-	}
 }
 
 env.f.dateFormatter = function(formatter, date) {
@@ -280,17 +263,7 @@ env.f.url = {}
 		// 读取参数并打开
 		var id = env.f.url.get('id')
 		if (id) {
-			var l = env.data.list.blog
-			var n = l.length
-
-			for (var i = 0; i < n; i++) {
-				if (l[i].src == id + '/') {
-					env.f.blog.open(id)
-					break
-				} else {
-					if (i == n - 1) {env.f.blog.open('page/oops')}
-				}
-			}
+			env.f.blog.open(id)
 		} else {
 			env.f.url.clear()
 			document.title = env.data.domain
@@ -303,9 +276,8 @@ env.f.blog = {}
 	env.f.blog.open = function(id) {
 		// 打开博客
 		document.querySelector('.blog').appendChild(document.createElement('iframe'))
-
 		env.f.page.load()
-		env.f.fade(document.querySelector('.blog'), 500)
+		env.f.fade(document.querySelector('.blog'), 300)
 
 		setTimeout(function (){
 			if (id != 'page/oops') {env.data.isNetwork ? (history.replaceState(null, null, window.location.origin + '/blog?id=' + id)) : ( env.f.url.set('id', id))}
@@ -359,7 +331,7 @@ env.f.init = function() {
 
 	// 通知
 	var e = document.querySelector('.menu-c2')
-	var l = env.data.list.info
+	var l = env.data.list.news
 	for (var i = 0; i < 5; i++) {
 		var div = document.createElement('news')
 			div.innerHTML = '<time>' + l[i].date + '</time><span title="' + l[i].des + '" >' + l[i].name + '</span>'
@@ -437,21 +409,31 @@ env.f.page = {}
 		env.f.fade(document.querySelector('.loading'), 300)
 
 		env.tmp.t5 = new Date()
-		var l = true
 		env.timer.t2 = setInterval(() => {
 			var t = new Date() - env.tmp.t5
-			document.querySelector('.loading span').innerHTML = (t / 1000).toFixed(2)
+			document.querySelector('.loading box2').innerHTML = (t / 1000).toFixed(2)
 		}, 100)
+
+		env.timer.t5 = setInterval(() => {
+			if (document.querySelector('.blog iframe')) {
+				document.querySelector('.blog iframe').remove()
+			}
+			document.querySelector('.blog').appendChild(document.createElement('iframe'))
+			document.querySelector('iframe').src = env.data.isNetwork ? (window.location.origin + '/blog/page/oops/page') : ('blog/page/oops/page.html')
+			document.querySelector('.blog').removeAttribute('style')
+		}, 60000)
+
 	}
 		env.f.page.load.stop = function() {
 			// 停止加载动画
 			clearInterval(env.timer.t2)
+			clearInterval(env.timer.t5)
 			env.tmp.t5 = null
 			delete env.tmp.t5
 			env.f.fade(document.querySelector('.loading'), -500)
 
 			setTimeout(function (){
-				document.querySelector('.loading span').innerHTML = ''
+				document.querySelector('.loading box2').innerHTML = ''
 			}, 500)
 		}
 
@@ -476,7 +458,7 @@ env.f.type = function() {
 env.data.version.search = '1.0.10'
 env.f.search = function() {
 
-	/*	站内搜索引擎
+	/*	站内检索引擎
 	*	created by sumiyo, 2025/1/02	with the help of ChatGPT
 
 		*/
@@ -525,7 +507,6 @@ env.f.search = function() {
 
 // 设置环境变量
 env.data.uptime = env.f.getDate()
-env.data.browser = env.f.getBrowser()
 
 env.f.url.read()
 

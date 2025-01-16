@@ -58,9 +58,6 @@
 	footer {
 		font-family: 'Microsoft YaHei';
 	}
-	footer right {
-		float: right;
-	}
 	footer a,
 	.post a {
 		height: 24px;
@@ -135,16 +132,9 @@
 	comment .op:after {
 		content: '👑';
 		margin-left: 5px;
-		font-size: 14px;
+		font-size: 18px;
 		color: rgba(var(--t-c2), 0.8);
 		pointer-events: none;
-	}
-
-	hr {
-		margin-left: 0;
-		width: 100%;
-		border: none;
-		border-top: 1px solid rgba(var(--t-t1), 0.3);
 	}
 
 	@media screen and (max-width: 850px)  {
@@ -165,7 +155,7 @@
 	<div class="main" >
 
 		<h1>广场</h1>
-		<i>—— 钟声响起，寒风穿过街道。空空的，广场上一个人都没有 …</i>
+		<i>—— 钟声响起，寒风穿过街道。空空的，广场上一个人都没有 ...</i>
 		<br />
 		<br class="f-1" />
 		<para>
@@ -187,18 +177,15 @@
 
 		<div class="post" >
 			<textarea oninput="this.value = this.value.replace(/\n/g, '')" placeholder="名字" autocomplete="off" maxlength="20" ></textarea>
-			<textarea placeholder="留下些什么吧 …" autocomplete="off" maxlength="200" class="tbox" ></textarea>
+			<textarea placeholder="留下些什么吧 ..." autocomplete="off" maxlength="200" class="tbox" ></textarea>
 
 			<a onclick="env.f.submit()" >SUBMIT</a>
 		</div>
 
 		<div class="list" ><span>加载中 ...</span><br /><br class="f-1" /></div>
-		<hr />
 		<footer>
 			<a onclick="env.f.page(-1)" class="disabled" >上一页</a><a onclick="env.f.page(1)" class="disabled" >下一页</a><a onclick="env.f.init()" >刷新</a>
-			<span>先认真看看我们的「<span class="policy" onclick="window.parent.postMessage(`env.f.linkto('page/policy')`, document.domain ? '/' : '*')" >使用协议</span>」哦</span>
-			<right><span>第 <span id="_1" >0</span> 页 | 共 <span id="_2" >0</span> 条留言</span></right>
-
+			<span>第 <span id="_1" >0</span> 页 | 共 <span id="_2" >0</span> 条留言 「<span class="policy" onclick="window.parent.postMessage(`env.f.linkto('page/policy')`, document.domain ? '/' : '*')" >使用协议</span>」</span>
 		</footer>
 	</div>
 

@@ -26,24 +26,16 @@ body{position:absolute;height:100%;width:100%;font-family:'Microsoft YaHei';over
 		<i>—— 某些意外的错误发生了？！</i>
 		<br />
 		<br class="f-1" />
-		<span>您正在访问的页面：<br class="f-3" /><span id="url" style="word-break: break-all;" >URL</span></span>
+		<span>您正在检索的页面：<br class="f-3" /><span id="url" style="word-break: break-all;" >URL</span></span>
 		<br />
 		<br class="f-3" />
-		<span>在我们的服务器上不可用。</span>
+		<span>在我们的服务器上无法找到。</span>
 		<br />
 		<br />
-		<span>这应该是个意外的错误，请检查您输入的 URL，或者「<a onclick="back();" href="javascript:;" class="link" >返回主页</a>」</span>
+		<span>这应该是个意外的错误，请检查您输入的地址，或者「<a onclick="window.parent.postMessage('env.f.blog.close()', document.domain ? '/' : '*')" href="javascript:;" class="link" >返回主页</a>」</span>
 		<br />
 	</div>
 
 </body>
-
-
-<script>
-	function back() {
-		window.parent.postMessage('window.location.href = "index"', document.domain.length == 0 && '*' || '/');
-	}
-
-</script>
 
 </html>
