@@ -49,7 +49,7 @@
 	}
 
 	env.timer.t1 = setInterval(() => {
-		if (!document.hidden && env.data.isLoad) {
+		if (!document.hidden && env.data.isLoad && env.tmp.t2) {
 			setTimeout(function (){
 				if (typeof env.tmp.t4 != 'undefined') {
 					env.f.msg('Hello 🎉', 3000)

@@ -557,7 +557,7 @@ window.addEventListener('load',function(){
 
 
 
-setTimeout(function (){env.tmp.t2 = 1}, 1000)
+env.tmp.t2 = 1
 setTimeout(console.log.bind(
 	console, 
 	'\n%c THEME %c しろい花 %c		ver.' + env.data.version.main + '\n',

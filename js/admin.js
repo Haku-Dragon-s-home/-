@@ -137,6 +137,8 @@ select * from 表名 where 列名='数据'													查询指定表指定行�
 update 表名 set 列名='新数据' where 列名='数据'											修改指定位置的数据
 alter table 旧表名 rename to 新表名													重命名表
 alter table 表名 rename column 旧列名 to 新列名											重命名列
+insert into 表名 (列名1, 列名2) VALUES (数据1, 数据2)										写入新数据
+delete from 表名 where 列名='数据'													删除指定行
 -----------------------------------------------------------`)
 		return
 	}
@@ -402,6 +404,7 @@ alter table 表名 rename column 旧列名 to 新列名											重命名列
 			return
 		})
 		.catch(err => {env.f.write(('<span class="a1" >' + err + '</span>').toLowerCase())})
+		return
 	}
 
 
